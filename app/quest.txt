@@ -1,0 +1,2 @@
+1. Routes->mygists->del "Method GET doesnt allowed"
+2. Redirect back
