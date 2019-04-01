@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Psr\Log\NullLogger;
 
 class MainController extends Controller
@@ -13,7 +14,7 @@ class MainController extends Controller
         $user_roles = ["admin","user"];
         $user = ["user_name"=>"Admin"];
         $categories = ["JS","PHP","Python"];
-        $gists = (new User())->gists();
+        $gists = DB::table('gists')->get();
         return view("main",["user_roles"=>$user_roles,
             "user"=>$user,
             "categories"=>$categories,

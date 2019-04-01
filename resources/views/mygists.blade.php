@@ -41,14 +41,12 @@
         @foreach($gists as $gist)
             <div class="full_info_container">
                 <div class="gist_container">
-                    <a class="del" href="{{route("delgist",["gistid"=>$gist["id"]])}}">del</a>
-                    <a class="gist_name" href="{{route("showmygist",["gistid"=>$gist["id"]])}}"><?=$gist["gist_name"]?></a>
-                    <div class="gist_date"><?=$gist["gist_date"]?></div>
-                    <div class="gist_files">
-                        @foreach($gist["files"] as $file)
-                            <div class="gist_file"><?=$file?></div>
-                        @endforeach
-                    </div>
+                    <a class="gist_name" href="{{route("showmygist",["gistid"=>$gist->id])}}">{{$gist->name}}</a>
+                    <form action="mygists/delgist/{{$gist->id}}" method="post">
+                        @method("delete")
+                        @csrf
+                        <input type="submit">
+                    </form>
                 </div>
                 <div class="upic"><img class="large_avatar" src="/aaa" alt=""></div>
             </div>

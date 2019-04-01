@@ -4,13 +4,15 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class MygistsController extends Controller
 {
     public function actionMygists(){
+        $user_id = 1;
         $user_roles = ["admin","user"];
         $user = ["user_name"=>"Admin"];
-        $gists = (new User())->gists();
+        $gists = DB::table('gists')->where("user_id",(int)$user_id)->get();
         $categories = ["JS","PHP","Python"];
         return view("mygists",[
             "user"=>$user,
@@ -32,11 +34,13 @@ class MygistsController extends Controller
             "files"=>$files]);
     }
 
-    public function actionAddgist(){
+    public function actionAddgist(Request $request){
+        DB::table('gists')->insert(["user_id"=>1,"category_id"=>1,"desc"=>"cdcdscsd","name"=>$request->post("gist_name")]);
         return redirect()->route("mygists");
     }
 
-    public function actionDelgist(){
+    public function actionDelgist($gistid){
+        DB::table('gists')->where("id",$gistid)->delete();
         return redirect()->route("mygists");
     }
 }

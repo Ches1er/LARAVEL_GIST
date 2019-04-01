@@ -30,15 +30,9 @@
             @foreach($gists as $gist)
                 <div class="full_info_container">
                     <div class="gist_container">
-                        <a class="gist_name" href="{{route("showgist",["gistid"=>$gist["id"]])}}"><?=$gist["gist_name"]?></a>
-                        <div class="gist_author"><?=$gist["gist_author"]?></div>
-                        <div class="gist_date"><?=$gist["gist_date"]?></div>
-                        <div class="gist_desc"><?=$gist["gist_desc"]?></div>
-                        <!--<div class="gist_files">
-                            @foreach($gist["files"] as $file)
-                                <div class="gist_file"><?=$file?></div>
-                            @endforeach
-                        </div> -->
+                        <a class="gist_name" href="{{route("showgist",["gistid"=>$gist->id])}}">{{$gist->name}}</a>
+                        <div class="gist_desc">{{$gist->desc}}</div>
+
                     </div>
                     <div class="upic"><img class="large_avatar" src="/aaa" alt=""></div>
                 </div>
