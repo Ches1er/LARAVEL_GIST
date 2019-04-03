@@ -14,10 +14,12 @@ class MainController extends Controller
         $user = ["user_name"=>"Admin"];
         $categories = MainService::instance()->getCategories();
         $gists = MainService::instance()->getGists($caturl,$page);
+        $files_count = MainService::instance()->getFilesCount();
         return view("main",["user_roles"=>$user_roles,
             "user"=>$user,
             "categories"=>$categories,
-            "gists"=>$gists]
+            "gists"=>$gists,
+            "files_count"=>$files_count]
             );
     }
 

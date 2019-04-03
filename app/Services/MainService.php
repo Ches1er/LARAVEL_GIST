@@ -10,6 +10,7 @@ namespace App\Services;
 
 
 use Illuminate\Support\Facades\DB;
+use PHPUnit\Framework\Constraint\Count;
 
 class MainService
 {
@@ -52,6 +53,12 @@ class MainService
      * Получаем страницу, основываясь на значении константы,
      * получаем список постов.
      */
+    public function getFilesCount(){
+        return DB::table('files')->select(DB::raw('count(`id`) as count,gist_id'))
+            ->groupBy('gist_id')
+            ->get();
+    }
+
     public function getGists($category_url,$page){
         $page===1?$offset = 0:$offset=$page*self::POSTS_PER_PAGE-self::POSTS_PER_PAGE;
         $postPerPage = self::POSTS_PER_PAGE;

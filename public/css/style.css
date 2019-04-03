@@ -191,6 +191,13 @@ aside a:hover {
     color: red;
     text-align: right;
 }
+.file_count{
+    margin-top: 5px;
+    color: #2a9055;
+    text-align: right;
+    font-size: small;
+    font-weight: bold;
+}
 
     /*Add gist*/
 
