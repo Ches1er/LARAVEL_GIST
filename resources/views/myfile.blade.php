@@ -11,21 +11,18 @@
 @if(is_null($user))@include("layouts.menus.menu_guest")
 @endif
 
-@section("title","Main")
+@section("title","File")
 @section("content")
     <nav>@yield("menu")</nav>
     <section>
         <div class="show_gist_container">
-            <div class="gist_name">{{$gist->name}}</div>
-            <div class="gist_desc">{{$gist->desc}}</div>
-            @forelse($files as $file)
-                <a class="gist_file" href="/showfile/{{$file->id}}">{{$file->name}}</a>
-                @empty
-                <a class="gist_author">No files yet here</a>
-                @endforelse
+            <div class="buttons">
+                <a class="back" href="/mygists/{{$file->gist_id}}">Back to the gist</a>
+            </div>
+
+            <div class="gist_name">{{$file->name}}</div>
+            <div class="gist_desc">{{$file->content}}</div>
         </div>
+
     </section>
 @endsection
-
-
-

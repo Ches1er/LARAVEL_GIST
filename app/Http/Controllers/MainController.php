@@ -2,19 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\MainService;
 use App\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Psr\Log\NullLogger;
 
 class MainController extends Controller
 {
-    public function actionIndex(Request $request){
+    public function actionIndex(Request $request,$caturl="all"){
         $request->get("page")===NULL?$page=1:$page=(int)$request->get("page");
         $user_roles = ["admin","user"];
         $user = ["user_name"=>"Admin"];
-        $categories = ["JS","PHP","Python"];
-        $gists = DB::table('gists')->get();
+        $categories = MainService::instance()->getCategories();
+        $gists = MainService::instance()->getGists($caturl,$page);
         return view("main",["user_roles"=>$user_roles,
             "user"=>$user,
             "categories"=>$categories,
@@ -29,6 +28,10 @@ class MainController extends Controller
     $gists = (new User())->gists();
     return view("mygists",["gists"=>$gists
     ]);
+    }
+
+    public function actionBack(){
+        return redirect()->back();
     }
 
     public function actionLogin(){

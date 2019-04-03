@@ -14,6 +14,7 @@
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', "MainController@actionIndex")->name("main");
+Route::get('/showcat/{caturl}', "MainController@actionIndex")->name("main_categories");
 
     //Login register logout
 Route::get('/login', "MainController@actionLogin")->name("login");
@@ -36,17 +37,21 @@ Route::get("/showfile/{fileid}","GistController@actionShowfile")->name("showfile
     //My gists
 Route::prefix('mygists')->group(function (){
     Route::get('', "MygistsController@actionMygists")->name("mygists");
-    Route::get('showgist/{gistid}', "MygistsController@actionShowgist")->name("showmygist");
+    Route::get('/showcat/{caturl}', "MygistsController@actionMygists")->name("mygists_categories");
+    Route::get('/{gistid}', "MygistsController@actionShowgist")->name("showmygist");
     Route::post('addgist', "MygistsController@actionAddgist")->name("addgist");
     Route::delete('delgist/{gistid}', "MygistsController@actionDelgist")->name("delgist");
-});
 
     //Files
-Route::prefix('files')->group(function (){
-    Route::post('addfile',"MyfilesController@actionAddfile")->name("addfile");
-    Route::delete('delfile/{fileid}',"MyfilesController@actionDelfile")->name("delfile");
-    Route::post('editfile/{fileid}',"MyfilesController@actionEditfile")->name("editfile");
+    Route::prefix('files')->group(function (){
+        Route::get('showfile/{fileid}',"MyfilesController@actionShowfile")->name("showfile");
+        Route::post('addfile',"MyfilesController@actionAddfile")->name("addfile");
+        Route::delete('delfile/{fileid}',"MyfilesController@actionDelfile")->name("delfile");
+        Route::get('showfile/editfile/{fileid}',"MyfilesController@actionEditfile")->name("editfile");
+    });
 });
+
+
 
 
 

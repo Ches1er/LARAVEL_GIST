@@ -21,22 +21,32 @@
             <ul class="category_menu">
                 <li><a href="/showcat/all">All</a></li>
                 @foreach($categories as $category)
-                    <li><a href="{{route("showcat",['caturl'=>$category])}}"><?=$category?></a></li>
+                    <li><a href="{{route("showcat",['caturl'=>$category->name])}}">{{$category->name}}</a></li>
                 @endforeach
             </ul>
         </aside>
 
         <div class="main_content">
-            @foreach($gists as $gist)
+            <div class="about_resource">About</div>
+            <div class="gists">
+            @forelse($gists as $gist)
                 <div class="full_info_container">
                     <div class="gist_container">
                         <a class="gist_name" href="{{route("showgist",["gistid"=>$gist->id])}}">{{$gist->name}}</a>
+                        <div class="gist_author">Author</div>
+                        <div class="gist_date"><?= date('d-m-y h:m:s',$gist->date)?></div>
                         <div class="gist_desc">{{$gist->desc}}</div>
-
                     </div>
                     <div class="upic"><img class="large_avatar" src="/aaa" alt=""></div>
                 </div>
-            @endforeach
+                 @empty
+                    <div class="full_info_container">
+                        <div class="gist_container">
+                            <div class="gist_author">Empty gists list</div>
+                        </div>
+                    </div>
+            @endforelse
+            </div>
         </div>
 
     </section>

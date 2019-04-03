@@ -16,6 +16,12 @@
 <body>
 <h1>My GistHub</h1>
 <div class="container">
+    <script type="text/javascript" src="http://js.nicedit.com/nicEdit-latest.js"></script> <script type="text/javascript">
+        //<![CDATA[
+        bkLib.onDomLoaded(function() {
+            nicEditors.allTextAreas() });
+        //]]>
+    </script>
     @yield("content")
 </div>
 </body>

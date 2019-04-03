@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
+use App\Services\MainService;
+use App\Services\GistService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class MygistsController extends Controller
 {
-    public function actionMygists(){
+    public function actionMygists(Request $request,$caturl="all"){
+        $request->get("page")===NULL?$page=1:$page=(int)$request->get("page");
         $user_id = 1;
         $user_roles = ["admin","user"];
         $user = ["user_name"=>"Admin"];
-        $gists = DB::table('gists')->where("user_id",(int)$user_id)->get();
-        $categories = ["JS","PHP","Python"];
+        $categories = MainService::instance()->getCategories();
+        $gists = MainService::instance()->getUserGists($caturl,$page,$user_id);
         return view("mygists",[
             "user"=>$user,
             "user_roles"=>$user_roles,
@@ -25,22 +26,28 @@ class MygistsController extends Controller
     public function actionShowgist($gistid){
         $user_roles = ["admin","user"];
         $user = ["user_name"=>"Admin"];
-        $gist_id = $gistid;
-        $files = ["file1_".$gist_id,"file2_".$gist_id,"file3_".$gist_id];
+        $gist_content = GistService::instance()->getGist($gistid);
+        $files = GistService::instance()->getFiles($gistid);
         return view("mygist",[
             "user_roles"=>$user_roles,
-            "gist_id"=>$gist_id,
             "user"=>$user,
+            "gist"=>$gist_content[0],
             "files"=>$files]);
     }
 
     public function actionAddgist(Request $request){
-        DB::table('gists')->insert(["user_id"=>1,"category_id"=>1,"desc"=>"cdcdscsd","name"=>$request->post("gist_name")]);
+        $date = time();
+        $data = ["user_id"=>1,
+                    "category_id"=>$request->post("category_name"),
+                    "desc"=>$request->post("gist_desc"),
+                    "name"=>$request->post("gist_name"),
+                    "date"=>$date];
+        GistService::instance()->addGist($data);
         return redirect()->route("mygists");
     }
 
     public function actionDelgist($gistid){
-        DB::table('gists')->where("id",$gistid)->delete();
+        GistService::instance()->delGist($gistid);
         return redirect()->route("mygists");
     }
 }

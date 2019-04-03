@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateGists extends Migration
+class CreateUpic extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,8 @@ class CreateGists extends Migration
      */
     public function up()
     {
-        Schema::create('gists', function (Blueprint $table) {
+        Schema::create('upic', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string("name");
-            $table->string("date");
-            $table->bigInteger("category_id");
-            $table->bigInteger("user_id");
-            $table->text("desc");
             $table->timestamps();
         });
     }
@@ -31,6 +26,6 @@ class CreateGists extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('gists');
+        Schema::dropIfExists('upic');
     }
 }

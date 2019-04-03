@@ -20,20 +20,26 @@
     <section>
     <aside>
         <ul class="category_menu">
-            <li><a href="/showcat/all">All</a></li>
+            <li><a href="{{route("mygists_categories",['caturl'=>"all"])}}">All</a></li>
             @foreach($categories as $category)
-                <li><a href="{{route("showcat",['caturl'=>$category])}}"><?=$category?></a></li>
+                <li><a href="{{route("mygists_categories",['caturl'=>$category->name])}}">{{$category->name}}</a></li>
             @endforeach
         </ul>
 
     </aside>
 
     <div class="main_content">
-        <div class="add_new_gist">
+        <div class="add_new">
             <p class="add_new_p">Add new gist</p>
             <form action="{{route("addgist")}}" method="post">
                 @csrf
+                Pick category:<select name="category_name" id="">
+                    @foreach ($categories as $category)
+                    <option value="{{$category->id}}">{{$category->name}}</option>
+                    @endforeach
+                </select>
                 Add gist name:<input type="text" name="gist_name">
+                Add gist desc:<textarea name="gist_desc"></textarea>
                 <input type="submit" value="Add">
             </form>
         </div>
@@ -45,7 +51,7 @@
                     <form action="mygists/delgist/{{$gist->id}}" method="post">
                         @method("delete")
                         @csrf
-                        <input type="submit">
+                        <input type="submit" value="Delete gist">
                     </form>
                 </div>
                 <div class="upic"><img class="large_avatar" src="/aaa" alt=""></div>
