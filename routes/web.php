@@ -19,6 +19,7 @@ Route::get('/showcat/{caturl}', "MainController@actionIndex")->name("main_catego
     //Login register logout
 Route::get('/login', "MainController@actionLogin")->name("login");
 Route::get('/register', "MainController@actionRegister")->name("register");
+Route::post('/registerhandle', "LoginRegisterController@actionRegister")->name("registerhandle");
 Route::get('/logout', "MainController@actionLogout")->name("logout");
 
     //Profile

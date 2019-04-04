@@ -17,8 +17,8 @@ class CreateGists extends Migration
             $table->bigIncrements('id');
             $table->string("name");
             $table->string("date");
-            $table->bigInteger("category_id");
-            $table->bigInteger("user_id");
+            $table->bigInteger("category_id")->unsigned();
+            $table->bigInteger("user_id")->unsigned();
             $table->text("desc");
             $table->timestamps();
         });

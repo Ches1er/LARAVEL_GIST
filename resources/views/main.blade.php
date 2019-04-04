@@ -27,7 +27,7 @@
         </aside>
 
         <div class="main_content">
-            <div class="about_resource">About</div>
+            <div class="about_resource">About project...</div>
             <div class="gists">
             @forelse($gists as $gist)
                 <div class="full_info_container">
@@ -36,12 +36,7 @@
                         <div class="gist_author">Author:</div>
                         <div class="gist_date"><?=date('d-m-y h:m:s',$gist->date)?></div>
                         <div class="gist_desc">{{$gist->desc}}</div>
-                        @forelse($files_count as $file_count)
-                            @if($file_count->gist_id===$gist->id)
-                                <div class="file_count">Number of files: {{$file_count->count}}</div>
-                            @endif
-                            @empty
-                            @endforelse
+                        <div class="file_count"><?="Number of files: ".count($gist->files)?></div>
                     </div>
                     <div class="upic"><img class="large_avatar" src="/aaa" alt=""></div>
                 </div>

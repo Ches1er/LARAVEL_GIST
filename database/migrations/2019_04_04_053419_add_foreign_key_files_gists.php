@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFiles extends Migration
+class AddForeignKeyFilesGists extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,8 @@ class CreateFiles extends Migration
      */
     public function up()
     {
-        Schema::create('files', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string("name");
-            $table->bigInteger("gist_id")->unsigned();
-            $table->text("content");
-            $table->timestamps();
+        Schema::table('files', function (Blueprint $table) {
+            $table->foreign('gist_id')->references('id')->on('gists');
         });
     }
 
@@ -29,6 +25,8 @@ class CreateFiles extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('files');
+        Schema::table('files', function (Blueprint $table) {
+            $table->dropForeign('gist_id');
+        });
     }
 }

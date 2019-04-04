@@ -9,6 +9,8 @@
 namespace App\Services;
 
 
+use App\Models\Category;
+use App\Models\Gist;
 use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Constraint\Count;
 
@@ -53,21 +55,14 @@ class MainService
      * Получаем страницу, основываясь на значении константы,
      * получаем список постов.
      */
-    public function getFilesCount(){
-        return DB::table('files')->select(DB::raw('count(`id`) as count,gist_id'))
-            ->groupBy('gist_id')
-            ->get();
-    }
-
     public function getGists($category_url,$page){
         $page===1?$offset = 0:$offset=$page*self::POSTS_PER_PAGE-self::POSTS_PER_PAGE;
         $postPerPage = self::POSTS_PER_PAGE;
         if ($category_url===null||$category_url==="all"){
-            return DB::table('gists')->limit($postPerPage)->offset($offset)->get();
+            return Gist::limit($postPerPage)->offset($offset)->get();
         }
-        $cat_id = DB::table('categories')->select(['id'])->where('name',$category_url)->first();
-        return DB::table('gists')->
-                    where('category_id',$cat_id->id)->
+        $cat_id = Category::select(['id'])->where('name',$category_url)->first();
+        return Gist::where('category_id',$cat_id->id)->
                     limit($postPerPage)->offset($offset)->
                     get();
     }
@@ -75,17 +70,16 @@ class MainService
         $page===1?$offset = 0:$offset=$page*self::POSTS_PER_PAGE-self::POSTS_PER_PAGE;
         $postPerPage = self::POSTS_PER_PAGE;
         if ($category_url===null||$category_url==="all"){
-            return DB::table('gists')->where('user_id',$user_id)->limit($postPerPage)->offset($offset)->get();
+            return Gist::where('user_id',$user_id)->limit($postPerPage)->offset($offset)->get();
         }
-        $cat_id = DB::table('categories')->select(['id'])->where('name',$category_url)->first();
-        return DB::table('gists')->
-                    where('user_id',$user_id)->
+        $cat_id = Category::select(['id'])->where('name',$category_url)->first();
+        return Gist::where('user_id',$user_id)->
                     where('category_id',$cat_id->id)->
                     limit($postPerPage)->offset($offset)->
                     get();
     }
     public function getCategories(){
-        $cat = DB::table('categories')->get();
+        $cat = Category::get();
         if (!empty($cat))return $cat;
         return [];
     }

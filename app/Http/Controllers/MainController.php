@@ -14,12 +14,10 @@ class MainController extends Controller
         $user = ["user_name"=>"Admin"];
         $categories = MainService::instance()->getCategories();
         $gists = MainService::instance()->getGists($caturl,$page);
-        $files_count = MainService::instance()->getFilesCount();
         return view("main",["user_roles"=>$user_roles,
             "user"=>$user,
             "categories"=>$categories,
-            "gists"=>$gists,
-            "files_count"=>$files_count]
+            "gists"=>$gists]
             );
     }
 
@@ -41,7 +39,7 @@ class MainController extends Controller
     }
 
     public function actionRegister(){
-
+        return view("register");
     }
 
     public function actionLogout(){

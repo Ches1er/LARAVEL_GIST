@@ -15,6 +15,7 @@ class CreateUpic extends Migration
     {
         Schema::create('upic', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('path');
             $table->timestamps();
         });
     }
