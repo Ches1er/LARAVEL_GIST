@@ -10,12 +10,10 @@ class MainController extends Controller
 {
     public function actionIndex(Request $request,$caturl="all"){
         $request->get("page")===NULL?$page=1:$page=(int)$request->get("page");
-        $user_roles = ["admin","user"];
-        $user = ["user_name"=>"Admin"];
         $categories = MainService::instance()->getCategories();
         $gists = MainService::instance()->getGists($caturl,$page);
-        return view("main",["user_roles"=>$user_roles,
-            "user"=>$user,
+        return view("main",["user_roles"=>null,
+            "user"=>null,
             "categories"=>$categories,
             "gists"=>$gists]
             );

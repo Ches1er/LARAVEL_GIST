@@ -1,32 +1,25 @@
 @extends("layouts.default")
 
-@if(!empty($user_roles))
-    @if(in_array("admin", $user_roles))@include("layouts.menus.menu_admin")
-    @elseif(in_array("user", $user_roles))@include("layouts.menus.menu_auth")
-    @endif
-@endif
-@if(is_null($user))@include("layouts.menus.menu_guest")
-@endif
-@if(!is_null($user)&& empty($user_roles))@include("layouts.menus.menu_nonauth")
-@endif
-@if(is_null($user))@include("layouts.menus.menu_guest")
-@endif
+@include("layouts.menus.menu")
+
 
 @section("title","Main")
 @section("content")
+    <footer>
+        <h1 class="display-6 m-3 text-primary">My GistHub</h1>
+    </footer>
     <nav>@yield("menu")</nav>
-    <section>
-
-        <aside>
-            <ul class="category_menu">
-                <li><a href="/showcat/all">All</a></li>
+    <div class="container row align-content-center">
+        <aside class="col-4">
+            <ul class="list-group">
+                <li class="list-group-item"><a href="/showcat/all">All</a></li>
                 @foreach($categories as $category)
-                    <li><a href="{{route("showcat",['caturl'=>$category->name])}}">{{$category->name}}</a></li>
+                    <li class="list-group-item"><a href="{{route("showcat",['caturl'=>$category->name])}}">{{$category->name}}</a></li>
                 @endforeach
             </ul>
         </aside>
 
-        <div class="main_content">
+        <div class="col-6">
             <div class="about_resource">About project...</div>
             <div class="gists">
             @forelse($gists as $gist)
@@ -50,5 +43,5 @@
             </div>
         </div>
 
-    </section>
+    </div>
 @endsection

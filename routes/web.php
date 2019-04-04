@@ -11,16 +11,12 @@
 |
 */
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', "MainController@actionIndex")->name("main");
 Route::get('/showcat/{caturl}', "MainController@actionIndex")->name("main_categories");
 
-    //Login register logout
-Route::get('/login', "MainController@actionLogin")->name("login");
-Route::get('/register', "MainController@actionRegister")->name("register");
-Route::post('/registerhandle', "LoginRegisterController@actionRegister")->name("registerhandle");
-Route::get('/logout', "MainController@actionLogout")->name("logout");
 
     //Profile
 Route::get('/profile', "MainController@actionProfile")->name("profile");
@@ -52,12 +48,10 @@ Route::prefix('mygists')->group(function (){
     });
 });
 
+Auth::routes();
+Route::get('/home', 'HomeController@index')->name('home');
 
 
+Auth::routes();
 
-
-
-
-
-
-
+Route::get('/home', 'HomeController@index')->name('home');
