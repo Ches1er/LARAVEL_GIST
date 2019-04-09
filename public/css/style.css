@@ -7,6 +7,7 @@
     width: 960px;
     margin: 0 auto;
 }
+
 section,nav,footer{
     background-color: #ededed;
     box-sizing: border-box;
@@ -25,12 +26,21 @@ header,footer {
 }
 footer {
     height: 30px;
-    margin-bottom: 10px;
 }
 section {
     padding: 20px;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin-top: 50px;
+}
+.current_user{
+    margin: 10px 0;
+    box-shadow: 2px 2px 3px 0px rgba(107,107,107,1);
+    border-radius: 5px;
+    position: absolute;
+    right: 200px;
+    padding: 5px;
+    width: 200px;
+    font-family: 'Poppins', sans-serif;
+    font-size: small;
 }
 h1,h2{
     color: #1864b7;
@@ -38,7 +48,11 @@ h1,h2{
     margin: 15px 0;
     font-family: 'Fira Sans', sans-serif;
 }
-
+h3{
+    color: #1864b7;
+    margin: 5px 0;
+    font-family: 'Poppins', sans-serif;
+}
 
 /*Menu*/
 nav{
@@ -46,8 +60,9 @@ nav{
     border-radius: 5px;
 }
 .main_menu,.auth_menu{
-    margin: 10px 0 0 5px;
     list-style: none;
+    padding: 5px;
+
 }
 .main_menu li{
     margin: 0 15px ;
@@ -57,7 +72,7 @@ nav{
 }
 .main_menu a{
     text-decoration: none;
-    font-family: 'Laila', serif;
+    font-family: 'Poppins', sans-serif;
 }
 
 .main_menu a:hover,.auth_menu a:hover{
@@ -70,17 +85,6 @@ nav{
 .small_avatar{
     width: 25px;
     height: 25px;
-}
-.activ_user{
-    width: 890px;
-    display: inline-flex;
-    flex-flow: row nowrap;
-    justify-content: flex-end;
-    padding-right: 10px;
-}
-.cur_user_name{
-    margin-top: 3px;
-    margin-right: 5px;
 }
 
 /*Aside*/
@@ -286,4 +290,74 @@ textarea[name="edit_file"]{
 form>div{
     background-color: #fff;
 }
+
+    /* Login_register */
+
+.login_register_container{
+    display: inline-flex;
+    flex-flow: column;
+}
+.container_heading{
+    font-size: large;
+    font-family: 'Poppins', sans-serif;
+    margin-bottom: 5px;
+}
+.login_register_error{
+    color: red;
+    font-family: 'Dosis', sans-serif;
+    font-weight: bold;
+}
+.login_register_form{
+    display: inline-flex;
+    flex-flow: column nowrap;
+}
+.login_register_form label,a{
+    font-family: 'Dosis', sans-serif;
+}
+.login_register_form button{
+    width: 100px;
+    margin-bottom: 5px;
+}
+.remember_me{
+    margin: 5px 0;
+}
+
+    /*Home*/
+
+.login_success{
+    width: 100%;
+    display: inline-flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    margin-top: 20px;
+    padding: 20px;
+
+}
+.login_success>div{
+    margin: auto;
+    padding: 10px;
+    font-family: 'Laila', serif;
+    font-size: large;
+    background-color: #ededed;
+    margin-bottom: 2px;
+    border: 1px white solid;
+    border-radius: 5px;
+}
+.login_success>div>a{
+    font-family: 'Laila', serif;
+}
+
+    /*Profile*/
+
+.main_profile_content{
+    width: 100%;
+    display: inline-block;
+    flex-flow: column;
+    background-color: #e9e9e9;
+    padding: 10px 15px;
+    box-shadow: 2px 2px 3px 0px rgba(107,107,107,1);
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
 

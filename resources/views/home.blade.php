@@ -1,23 +1,17 @@
-@extends('layouts.app')
+@extends('layouts.default')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Dashboard</div>
-
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    You are logged in!
-                </div>
-            </div>
+    <div class="login_success">
+        <div class="greetings">
+            You are logged in as: {{ Auth::user()->name }}
         </div>
+        <div class="back_main">
+            <a href="{{ route('main') }}">Back to Main page</a>
+        </div>
+        @if (session('status'))
+            <span class="login_register_error">
+            {{ session('status') }}
+        </span>
+        @endif
     </div>
-</div>
 @endsection

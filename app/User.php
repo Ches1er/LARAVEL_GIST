@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Models\Role;
+use App\Models\User_role;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -36,4 +38,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /* Дальняя таблица->Таблица посредник
+    ->Ключ в таблице посреднике к текущей->Ключ в дальней таблице
+    ->Ключ в текущей->Ключ в таблице посреднике к дальней*/
+    public function roles(){
+        return $this->hasManyThrough(Role::class,User_role::class,
+            'user_id','id','id','role_id');
+    }
 }

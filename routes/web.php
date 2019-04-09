@@ -17,9 +17,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', "MainController@actionIndex")->name("main");
 Route::get('/showcat/{caturl}', "MainController@actionIndex")->name("main_categories");
 
-
     //Profile
-Route::get('/profile', "MainController@actionProfile")->name("profile");
+Route::get('/profile', "MainController@actionProfile")->middleware(["auth"])->name("profile");
 
     //Admin
 Route::get('/admin', "MainController@actionAdmin")->name("admin");
@@ -48,9 +47,12 @@ Route::prefix('mygists')->group(function (){
     });
 });
 
-Auth::routes();
-Route::get('/home', 'HomeController@index')->name('home');
+//Profile
+Route::post('/addpic',"ProfileController@actionAddpic")->name("addpic");
+Route::put('/changename',"ProfileController@actionChangename")->name("changename");
 
+/*vendor/laravel/framework/src/illuminate/routing/router.php
+1149 string */
 
 Auth::routes();
 

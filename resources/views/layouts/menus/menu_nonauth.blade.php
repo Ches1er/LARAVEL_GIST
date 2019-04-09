@@ -1,8 +1,9 @@
 @section("menu")
 
-    <ul class="nav">
-        <li class="nav-item"><a class="nav-link" href="{{route("main")}}">Main</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{route("profile")}}">Profile</a></li>
+    <ul class="main_menu">
+        <li><a href="{{route("main")}}">Main</a></li>
+        <li><a href="{{route("profile")}}">Profile</a></li>
+        <li><a href="{{route("logout")}}">Logout</a></li>
     </ul>
 
 @endsection

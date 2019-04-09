@@ -1,22 +1,30 @@
 @extends("layouts.default")
 
-@if(!empty($user_roles))
-    @if(in_array("admin", $user_roles))@include("layouts.menus.menu_admin")
-    @elseif(in_array("user", $user_roles))@include("layouts.menus.menu_auth")
+@guest
+    @include("layouts.menus.menu_guest")
+@else
+    @if(!empty($user_roles))
+        @foreach($user_roles as $role)
+            @if($role->name === "Admin")
+                @include("layouts.menus.menu_admin")
+                @break
+            @else
+                @include("layouts.menus.menu_auth")
+            @endif
+        @endforeach
     @endif
-@endif
-@if(is_null($user))@include("layouts.menus.menu_guest")
-@endif
-@if(!is_null($user)&& empty($user_roles))@include("layouts.menus.menu_nonauth")
-@endif
-@if(is_null($user))@include("layouts.menus.menu_guest")
-@endif
+    @include("layouts.menus.menu_nonauth")
+@endguest
 
 @section("title","Mygists")
 
 @section("content")
     <nav>@yield("menu")</nav>
-    <h3>MyGists</h3>
+    @guest
+        <div class="current_user">Current user: none</div>
+    @else
+        <div class="current_user">Current user :{{Auth::user()->name}}</div>
+    @endguest
     <section>
     <aside>
         <ul class="category_menu">
@@ -44,6 +52,7 @@
             </form>
         </div>
         <hr />
+        <h3>My gists list:</h3>
         @foreach($gists as $gist)
             <div class="full_info_container">
                 <div class="gist_container">
@@ -53,8 +62,13 @@
                         @csrf
                         <input type="submit" value="Delete gist">
                     </form>
+                    @forelse($files_count as $file_count)
+                        @if($file_count->gist_id===$gist->id)
+                            <div class="file_count">Number of files: {{$file_count->count}}</div>
+                        @endif
+                    @empty
+                    @endforelse
                 </div>
-                <div class="upic"><img class="large_avatar" src="/aaa" alt=""></div>
             </div>
         @endforeach
     </div>

@@ -5,21 +5,23 @@ namespace App\Http\Controllers;
 use App\Services\MainService;
 use App\Services\GistService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class MygistsController extends Controller
 {
     public function actionMygists(Request $request,$caturl="all"){
         $request->get("page")===NULL?$page=1:$page=(int)$request->get("page");
-        $user_id = 1;
-        $user_roles = ["admin","user"];
-        $user = ["user_name"=>"Admin"];
+        $user = Auth::user();
+        is_object($user)?$user_roles=$user->roles:$user_roles=[];
         $categories = MainService::instance()->getCategories();
-        $gists = MainService::instance()->getUserGists($caturl,$page,$user_id);
+        $gists = MainService::instance()->getGists($caturl,$page);
+        $files_count = MainService::instance()->getFilesCount();
         return view("mygists",[
             "user"=>$user,
             "user_roles"=>$user_roles,
             "gists"=>$gists,
-            "categories"=>$categories
+            "categories"=>$categories,
+            "files_count"=>$files_count
         ]);
     }
 
