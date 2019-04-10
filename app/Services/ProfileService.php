@@ -26,4 +26,8 @@ class ProfileService
     {
         DB::table("users")->where("id",$id)->update(["name"=>$new_name]);
     }
+
+    public function getPicPath(){
+
+    }
 }

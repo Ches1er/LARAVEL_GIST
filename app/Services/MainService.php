@@ -9,6 +9,8 @@
 namespace App\Services;
 
 
+use App\Models\Gist;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Constraint\Count;
 
@@ -63,10 +65,10 @@ class MainService
         $page===1?$offset = 0:$offset=$page*self::POSTS_PER_PAGE-self::POSTS_PER_PAGE;
         $postPerPage = self::POSTS_PER_PAGE;
         if ($category_url===null||$category_url==="all"){
-            return DB::table('gists')->limit($postPerPage)->offset($offset)->get();
+            return Gist::limit($postPerPage)->offset($offset)->get();
         }
         $cat_id = DB::table('categories')->select(['id'])->where('name',$category_url)->first();
-        return DB::table('gists')->
+        return Gist::
                     where('category_id',$cat_id->id)->
                     limit($postPerPage)->offset($offset)->
                     get();
@@ -75,14 +77,18 @@ class MainService
         $page===1?$offset = 0:$offset=$page*self::POSTS_PER_PAGE-self::POSTS_PER_PAGE;
         $postPerPage = self::POSTS_PER_PAGE;
         if ($category_url===null||$category_url==="all"){
-            return DB::table('gists')->where('user_id',$user_id)->limit($postPerPage)->offset($offset)->get();
+            return Gist::where('user_id',$user_id)
+                ->limit($postPerPage)
+                ->offset($offset)
+                ->get();
         }
         $cat_id = DB::table('categories')->select(['id'])->where('name',$category_url)->first();
-        return DB::table('gists')->
+            return Gist::
                     where('user_id',$user_id)->
                     where('category_id',$cat_id->id)->
-                    limit($postPerPage)->offset($offset)->
-                    get();
+                    limit($postPerPage)
+                    ->offset($offset)
+                    ->get();
     }
     public function getCategories(){
         $cat = DB::table('categories')->get();
@@ -102,6 +108,12 @@ class MainService
     public function getError(){
         if (isset($_SESSION["error"]))return $_SESSION["error"];
         return null;
+    }
+
+    public function getRoles(){
+        Auth::check()?$user_roles=Auth::user()->roles():
+                        $user_roles=null;
+        return $user_roles;
     }
 
 }

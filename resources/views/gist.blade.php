@@ -17,7 +17,7 @@
     <section>
         <div class="show_gist_container">
             <div class="gist_name">{{$gist->name}}</div>
-            <div class="gist_desc">{{$gist->desc}}</div>
+            <div class="gist_desc">{!! $gist->desc !!}</div>
             @forelse($files as $file)
                 <a class="gist_file" href="/showfile/{{$file->id}}">{{$file->name}}</a>
                 @empty

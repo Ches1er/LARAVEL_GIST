@@ -3,9 +3,9 @@
 @guest
     @include("layouts.menus.menu_guest")
 @else
-    @if(!empty($user_roles))
+    @if(!is_null($user_roles))
         @foreach($user_roles as $role)
-            @if($role->name === "Admin")
+            @if($role === "Admin")
                 @include("layouts.menus.menu_admin")
                 @break
             @else

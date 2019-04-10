@@ -1,3 +1,4 @@
+
 <?php
 
 use Illuminate\Support\Facades\Schema;
@@ -17,6 +18,7 @@ class CreateGistsTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->mediumText('desc');
+            $table->string('date');
             $table->bigInteger('user_id')->unsigned();
             $table->bigInteger('category_id')->unsigned();
             $table->timestamps();

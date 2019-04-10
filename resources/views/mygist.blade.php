@@ -1,15 +1,19 @@
     @extends("layouts.default")
-@if(!empty($user_roles))
-    @if(in_array("admin", $user_roles))@include("layouts.menus.menu_admin")
-    @elseif(in_array("user", $user_roles))@include("layouts.menus.menu_auth")
-    @endif
-@endif
-@if(is_null($user))@include("layouts.menus.menu_guest")
-@endif
-@if(!is_null($user)&& empty($user_roles))@include("layouts.menus.menu_nonauth")
-@endif
-@if(is_null($user))@include("layouts.menus.menu_guest")
-@endif
+    @guest
+        @include("layouts.menus.menu_guest")
+    @else
+        @if(!is_null($user_roles))
+            @foreach($user_roles as $role)
+                @if($role === "Admin")
+                    @include("layouts.menus.menu_admin")
+                    @break
+                @else
+                    @include("layouts.menus.menu_auth")
+                @endif
+            @endforeach
+        @endif
+        @include("layouts.menus.menu_nonauth")
+    @endguest
 
 @section("content")
     <nav>@yield("menu")</nav>
@@ -17,7 +21,7 @@
         <div class="show_gist_container">
             <div class="gist_name">{{$gist->name}}</div>
             <hr />
-            <div class="gist_desc">{{$gist->desc}}</div>
+            <div class="gist_desc">{!! $gist->desc !!}</div>
             @forelse($files as $file)
                 <a class="gist_file" href="files/showfile/{{$file->id}}">{{$file->name}}</a>
                 <form action="files/delfile/{{$file->id}}" method="post">

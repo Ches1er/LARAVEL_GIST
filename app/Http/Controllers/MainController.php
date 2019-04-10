@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Upic;
+use App\Services\AdminService;
 use App\Services\MainService;
 use App\User;
 use Illuminate\Http\Request;
@@ -12,8 +13,7 @@ class MainController extends Controller
 {
     public function actionIndex(Request $request,$caturl="all"){
         $request->get("page")===NULL?$page=1:$page=(int)$request->get("page");
-        $user = Auth::user();
-        is_object($user)?$user_roles=$user->roles:$user_roles=[];
+        $user_roles=MainService::instance()->getRoles();
         $categories = MainService::instance()->getCategories();
         $gists = MainService::instance()->getGists($caturl,$page);
         $files_count = MainService::instance()->getFilesCount();
@@ -25,10 +25,12 @@ class MainController extends Controller
     }
 
     public function actionProfile(){
+        $user_roles=MainService::instance()->getRoles();
         $upic_id = User::select("upic_id")->where("id",Auth::user()->id)->first();
         $upic_path = Upic::select("path")->where("id",$upic_id->upic_id)->first();
-        return view("profile",["upic_path"=>$upic_path]);
+        return view("profile",["upic_path"=>$upic_path,"user_roles"=>$user_roles]);
     }
+
     public function actionMyGists(){
     $gists = (new User())->gists();
     return view("mygists",["gists"=>$gists
@@ -50,8 +52,15 @@ class MainController extends Controller
     public function actionLogout(){
 
     }
-    public function actionAdmin(){
-
+    public function actionAdmin(Request $request){
+        is_null($request->get("name"))?$found_user=null:
+            $found_user=AdminService::instance()->FindUser($request->get("name"));
+        $user_roles=MainService::instance()->getRoles();
+        $categories = MainService::instance()->getCategories();
+        return view("admin",["user_roles"=>$user_roles,
+            "categories"=>$categories,
+            "found_user"=>$found_user]
+        );
     }
 
 }

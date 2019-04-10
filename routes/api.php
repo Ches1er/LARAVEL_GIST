@@ -20,5 +20,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 Route::get('/gists/{catid?}','RestController@actionGists');
 Route::get('/gist/{gistid}','RestController@actionFiles');
+Route::post('/gist/{gistid}/add','RestController@actionAddFile')->middleware('auth');
+
 Route::get('/categories/get','RestController@actionCategories');
-Route::post('/categories/post','RestController@actionAddCategory');
+Route::post('/categories/add','RestController@actionAddCategory')->middleware("admin");
+Route::delete('/categories/delete','RestController@actionDelCategory')->middleware("admin");;

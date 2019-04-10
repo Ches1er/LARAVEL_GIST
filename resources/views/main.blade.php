@@ -3,9 +3,9 @@
 @guest
     @include("layouts.menus.menu_guest")
     @else
-    @if(!empty($user_roles))
+    @if(!is_null($user_roles))
         @foreach($user_roles as $role)
-            @if($role->name === "Admin")
+            @if($role === "Admin")
                 @include("layouts.menus.menu_admin")
                 @break
             @else
@@ -42,9 +42,9 @@
                 <div class="full_info_container">
                     <div class="gist_container">
                         <a class="gist_name" href="{{route("showgist",["gistid"=>$gist->id])}}">{{$gist->name}}</a>
-                        <div class="gist_author">Author:</div>
+                        <div class="gist_author">Author:{{$gist->getUser()->name}}</div>
                         <div class="gist_date"><?=date('d-m-y h:m:s',$gist->date)?></div>
-                        <div class="gist_desc">{{$gist->desc}}</div>
+                        <div class="gist_desc">{!!$gist->desc!!}</div>
                         @forelse($files_count as $file_count)
                             @if($file_count->gist_id===$gist->id)
                                 <div class="file_count">Number of files: {{$file_count->count}}</div>
@@ -52,7 +52,7 @@
                             @empty
                             @endforelse
                     </div>
-                    <div class="upic"><img class="large_avatar" src="/aaa" alt=""></div>
+                    <div class="upic"><img class="large_avatar" src="/{{$gist->getUser()->getPic()->path}}" alt=""></div>
                 </div>
                  @empty
                     <div class="full_info_container">

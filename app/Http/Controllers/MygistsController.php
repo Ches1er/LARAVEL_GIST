@@ -11,13 +11,11 @@ class MygistsController extends Controller
 {
     public function actionMygists(Request $request,$caturl="all"){
         $request->get("page")===NULL?$page=1:$page=(int)$request->get("page");
-        $user = Auth::user();
-        is_object($user)?$user_roles=$user->roles:$user_roles=[];
+        $user_roles=MainService::instance()->getRoles();
         $categories = MainService::instance()->getCategories();
-        $gists = MainService::instance()->getGists($caturl,$page);
+        $gists = MainService::instance()->getUserGists($caturl,$page,Auth::id());
         $files_count = MainService::instance()->getFilesCount();
         return view("mygists",[
-            "user"=>$user,
             "user_roles"=>$user_roles,
             "gists"=>$gists,
             "categories"=>$categories,
