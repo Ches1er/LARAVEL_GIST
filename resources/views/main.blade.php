@@ -23,7 +23,7 @@
     @guest
         <div class="current_user">Current user: none</div>
         @else
-        <div class="current_user">Current user :{{Auth::user()->name}}</div>
+        <div class="current_user">Current user : {{Auth::user()->name}}</div>
     @endguest
     <section>
         <aside>
@@ -62,7 +62,7 @@
                     </div>
             @endforelse
             </div>
+            {{$gists->links()}}
         </div>
-
     </section>
 @endsection

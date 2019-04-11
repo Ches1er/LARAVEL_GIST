@@ -19,20 +19,25 @@
     <nav>@yield("menu")</nav>
     <section>
         <div class="show_gist_container">
+            <a class="back" href="{{route('mygists')}}">Back to Mygists</a>
             <div class="gist_name">{{$gist->name}}</div>
             <hr />
-            <div class="gist_desc">{!! $gist->desc !!}</div>
-            @forelse($files as $file)
-                <a class="gist_file" href="files/showfile/{{$file->id}}">{{$file->name}}</a>
-                <form action="files/delfile/{{$file->id}}" method="post">
-                    @method("delete")
-                    @csrf
-                    <input type="submit" value="Delete file">
-                </form>
-            @empty
-                <p>empty</p>
-            @endforelse
-
+            <div class="gist_desc">Gist Description: {!! $gist->desc !!}</div>
+            <hr />
+            <ul>
+                @forelse($files as $file)
+                    <p class="files">Gist contents next files:</p>
+                    <li><a class="gist_file" href="files/showfile/{{$file->id}}">{{$file->name}}</a>
+                    <form action="files/delfile/{{$file->id}}" method="post">
+                        @method("delete")
+                        @csrf
+                        <input type="submit" value="Delete file">
+                    </form>
+                    </li>
+                @empty
+                    <p class="files">Gist doesnt have any files yet:</p>
+                @endforelse
+            </ul>
             <div class="add_new">
                 <p class="add_new_p">Add new file</p>
                 <form action="files/addfile" method="post">

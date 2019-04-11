@@ -69,6 +69,7 @@
                     @empty
                     @endforelse
                 </div>
+                {{$gists->links()}}
             </div>
         @endforeach
     </div>

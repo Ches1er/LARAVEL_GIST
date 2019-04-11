@@ -99,7 +99,7 @@ aside{
     border-radius: 5px;
 }
 
-aside ul{
+ul{
     list-style: none;
 }
 aside ul li{
@@ -178,9 +178,15 @@ aside a:hover {
 .gist_name{
     text-decoration: none;
     margin-bottom: 10px;
+    font-size: large;
+    color: #2542a4;
+    font-weight: bold;
+    font-family: 'Poppins', sans-serif;
 }
 .gist_desc{
     font-family: 'PT Sans', sans-serif;
+    margin: 5px 0;
+    text-indent: 10px;
 }
 .gist_files{
     display: inline-flex;
@@ -245,10 +251,18 @@ select,input[name="Add post"]{
     /*Show gist*/
 
 .show_gist_container{
+    width: 100%;
     display: inline-flex;
     flex-flow: column;
     box-sizing: border-box;
 }
+    /*File table*/
+
+caption{
+    margin: 5px;
+    color: #1a72ce;
+}
+
 
     /*Show file*/
 .buttons{
@@ -261,12 +275,18 @@ textarea[name="edit_file"]{
 }
 
 .back, .edit_button{
+    text-align: center;
+    width: 100px;
     padding: 2px 5px;
     border: #1a72ce 1px solid;
     border-radius: 2px;
     text-decoration: none;
     color: #325ff9;
     margin-bottom: 5px;
+}
+.back:hover{
+    color: #8594ff;
+    border: #8594ff 1px solid;
 }
 
     /*Comments*/
@@ -387,6 +407,21 @@ form>div{
     flex-flow: column;
     padding: 10px;
     box-sizing: border-box;
+}
+
+    /*Pagination*/
+
+.pagination{
+    text-align: center;
+    margin-top: 10px;
+}
+
+.pagination>li{
+    display: inline-flex;
+    margin-right: 5px;
+}
+.pagination>li>a{
+    color: #165eac;
 }
 
 

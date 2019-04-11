@@ -21,7 +21,7 @@
             </div>
 
             <div class="gist_name">{{$file->name}}</div>
-            <div class="gist_desc">{{$file->content}}</div>
+            <div class="gist_desc">{!! $file->content !!}</div>
         </div>
 
     </section>

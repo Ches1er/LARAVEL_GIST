@@ -6,16 +6,16 @@ use App\Models\Upic;
 use App\Services\AdminService;
 use App\Services\MainService;
 use App\User;
+use DemeterChain\Main;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class MainController extends Controller
 {
     public function actionIndex(Request $request,$caturl="all"){
-        $request->get("page")===NULL?$page=1:$page=(int)$request->get("page");
         $user_roles=MainService::instance()->getRoles();
         $categories = MainService::instance()->getCategories();
-        $gists = MainService::instance()->getGists($caturl,$page);
+        $gists = MainService::instance()->getGists($caturl);
         $files_count = MainService::instance()->getFilesCount();
         return view("main",["user_roles"=>$user_roles,
             "categories"=>$categories,
@@ -31,27 +31,6 @@ class MainController extends Controller
         return view("profile",["upic_path"=>$upic_path,"user_roles"=>$user_roles]);
     }
 
-    public function actionMyGists(){
-    $gists = (new User())->gists();
-    return view("mygists",["gists"=>$gists
-    ]);
-    }
-
-    public function actionBack(){
-        return redirect()->back();
-    }
-
-    public function actionLogin(){
-
-    }
-
-    public function actionRegister(){
-
-    }
-
-    public function actionLogout(){
-
-    }
     public function actionAdmin(Request $request){
         is_null($request->get("name"))?$found_user=null:
             $found_user=AdminService::instance()->FindUser($request->get("name"));
@@ -62,7 +41,6 @@ class MainController extends Controller
             "found_user"=>$found_user]
         );
     }
-
 }
 
 

@@ -23,7 +23,7 @@ class GistService
     {
     }
     public function getGist($gist_id){
-        return DB::table("gists")->where("id",(int)$gist_id)->get();
+        return DB::table("gists")->where("id",(int)$gist_id)->first();
     }
     public function getFiles($gist_id){
         return DB::table("files")->where("gist_id",(int)$gist_id)->get();

@@ -10,10 +10,9 @@ use Illuminate\Support\Facades\Auth;
 class MygistsController extends Controller
 {
     public function actionMygists(Request $request,$caturl="all"){
-        $request->get("page")===NULL?$page=1:$page=(int)$request->get("page");
         $user_roles=MainService::instance()->getRoles();
         $categories = MainService::instance()->getCategories();
-        $gists = MainService::instance()->getUserGists($caturl,$page,Auth::id());
+        $gists = MainService::instance()->getUserGists($caturl,Auth::id());
         $files_count = MainService::instance()->getFilesCount();
         return view("mygists",[
             "user_roles"=>$user_roles,
@@ -37,7 +36,7 @@ class MygistsController extends Controller
 
     public function actionAddgist(Request $request){
         $date = time();
-        $data = ["user_id"=>1,
+        $data = ["user_id"=>Auth::id(),
                     "category_id"=>$request->post("category_name"),
                     "desc"=>$request->post("gist_desc"),
                     "name"=>$request->post("gist_name"),

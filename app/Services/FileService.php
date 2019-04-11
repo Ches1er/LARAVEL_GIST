@@ -22,7 +22,7 @@ class FileService
     {
     }
     public function getFile($fileid){
-        return DB::table('files')->where('id',$fileid)->get();
+        return DB::table('files')->where('id',$fileid)->first();
     }
     public function addFile(array $data){
         DB::transaction(function()use ($data){
