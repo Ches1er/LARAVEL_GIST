@@ -64,16 +64,23 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \App\User
      */
-    protected function create(array $data)
+    protected function create(array $data):User
     {
-        $user_data = ['name' => $data['name'],'remember_token'=>"token"];
-        Mail::to($data['email'])->send(new EmailConfirmation($user_data));
-        return User::create([
+
+        $token = md5($data['name']);
+        $user_data = ['name' => $data['name'],'remember_token'=>$token];
+
+        config(['mail.username' => 'myblogtestemail@gmail.com']);
+        config(['mail.password' => 'testemail']);
+
+        $user=User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'remember_token'=>"token"
+            'remember_token'=>$token
         ]);
+        Mail::to($data['email'])->send(new EmailConfirmation($user_data));
+        return $user;
     }
 
 }

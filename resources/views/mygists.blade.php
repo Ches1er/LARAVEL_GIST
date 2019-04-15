@@ -53,7 +53,7 @@
         </div>
         <hr />
         <h3>My gists list:</h3>
-        @foreach($gists as $gist)
+        @forelse($gists as $gist)
             <div class="full_info_container">
                 <div class="gist_container">
                     <a class="gist_name" href="{{route("showmygist",["gistid"=>$gist->id])}}">{{$gist->name}}</a>
@@ -71,7 +71,9 @@
                 </div>
                 {{$gists->links()}}
             </div>
-        @endforeach
+        @empty
+            <p class="files">You dont have any gists yet:</p>
+        @endforelse
     </div>
     </section>
 @endsection

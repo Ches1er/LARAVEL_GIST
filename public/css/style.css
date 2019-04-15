@@ -424,4 +424,24 @@ form>div{
     color: #165eac;
 }
 
+    /*Error pages*/
+
+.page_error{
+    display: inline-flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-content: center;
+    width: 100%;
+}
+.page_error_text{
+    text-align:center;
+    font-size: larger;
+    font-family: 'Laila', serif;
+    color: #f94d44;
+}
+.page_error_main{
+    text-align:center;
+    width: 100%;
+}
+
 

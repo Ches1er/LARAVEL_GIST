@@ -22,6 +22,6 @@ class IsAdmin
         if (Auth::user() &&  $isAdmin) {
             return $next($request);
         }
-        return redirect('/');
+        return redirect('/notadmin');
     }
 }
