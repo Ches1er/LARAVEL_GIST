@@ -18,10 +18,10 @@ Route::get('/', "MainController@actionIndex")->name("main");
 Route::get('/showcat/{caturl}', "MainController@actionIndex")->name("main_categories");
 
     //Profile
-Route::get('/profile', "MainController@actionProfile")->middleware(["auth"])->name("profile");
+Route::get('/profile', "MainController@actionProfile")->middleware('isValidUser')->name("profile");
 
     //Admin
-Route::get('/admin', "MainController@actionAdmin")->middleware("auth","admin")->name("admin");
+Route::get('/admin', "MainController@actionAdmin")->middleware("auth","check_role:Admin")->name("admin");
 Route::post("/addnewcat","AdminController@actionAddnewcat")->middleware("auth","admin")->name("addcat");
 Route::get("/finduser","AdminController@actionFindUser")->middleware("auth","admin")->name("finduser");
 Route::get('/notadmin',function (){
@@ -36,7 +36,7 @@ Route::get("/showgist/{gistid}","GistController@actionShowgist")->name("showgist
 Route::get("/showfile/{fileid}","GistController@actionShowfile")->name("showfile");
 
     //My gists
-Route::prefix('mygists')->group(function (){
+Route::prefix('mygists')->middleware('isValidUser')->group(function (){
     Route::get('', "MygistsController@actionMygists")->name("mygists");
     Route::get('/showcat/{caturl}', "MygistsController@actionMygists")->name("mygists_categories");
     Route::get('/{gistid}', "MygistsController@actionShowgist")->name("showmygist");
@@ -62,6 +62,10 @@ Route::put('/changename',"ProfileController@actionChangename")->name("changename
 Auth::routes();
 Route::get('finalregister/{token}','Auth\FinalRegister@actionFinalRegister')->name('finalregister');
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/invalid_user',function (){
+    return view('errors.invalid_user');
+})->name('invalid_user');
 
 //Email test
 

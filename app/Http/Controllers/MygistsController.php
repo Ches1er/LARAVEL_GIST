@@ -30,7 +30,7 @@ class MygistsController extends Controller
         return view("mygist",[
             "user_roles"=>$user_roles,
             "user"=>$user,
-            "gist"=>$gist_content[0],
+            "gist"=>$gist_content,
             "files"=>$files]);
     }
 

@@ -60,4 +60,10 @@ class User extends Authenticatable
     public function getPic(){
         return $this->belongsTo(Upic::class,'upic_id','id')->first();
     }
+
+    public function hasBan(){
+        $roles = $this->roles();
+        if (in_array("Invalid",$roles))return true;
+        return false;
+    }
 }

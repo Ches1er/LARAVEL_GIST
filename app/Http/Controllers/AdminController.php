@@ -11,4 +11,14 @@ class AdminController extends Controller
         AdminService::instance()->AddCategory($request->post("name"));
         return redirect()->route("admin");
     }
+
+    public function actionBanUser(Request $request){
+        AdminService::instance()->banUser($request->post("name"));
+        return redirect()->route("admin");
+    }
+
+    public function actionUnbanUser(Request $request){
+        AdminService::instance()->unbanUser($request->post("name"));
+        return redirect()->route("admin");
+    }
 }

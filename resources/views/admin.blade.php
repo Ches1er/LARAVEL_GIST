@@ -51,6 +51,7 @@
                     @else
                     <div class="admin_user_name">
                         {{$found_user->name}}
+
                     </div>
                     @endif
 
