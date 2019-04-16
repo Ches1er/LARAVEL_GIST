@@ -22,8 +22,6 @@
             <a class="back" href="{{route('mygists')}}">Back to Mygists</a>
             <div class="gist_name">{{$gist->name}}</div>
             <hr />
-            <div class="gist_desc">Gist Description: {!! $gist->desc !!}</div>
-            <hr />
             <ul>
                 @forelse($files as $file)
                     <p class="files">Gist contents next files:</p>

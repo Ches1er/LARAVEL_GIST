@@ -12,7 +12,7 @@ class MyfilesController extends Controller
         $user = ["user_name"=>"Admin"];
         $file = FileService::instance()->getFile($fileid);
         return view('myfile',["user_roles"=>$user_roles,
-            "user"=>$user,"file"=>$file[0]]);
+            "user"=>$user,"file"=>$file]);
     }
     public function actionAddfile(Request $request){
         $data = ["gist_id"=>$request->post("gist_id"),
