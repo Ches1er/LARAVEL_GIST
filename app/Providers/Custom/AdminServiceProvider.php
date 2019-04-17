@@ -14,7 +14,7 @@ class AdminServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('AdminService',function (){
+        $this->app->bind(AdminService::class,function (){
             return new AdminService();
         });
     }

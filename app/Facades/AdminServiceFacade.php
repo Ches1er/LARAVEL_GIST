@@ -9,12 +9,13 @@
 namespace App\Facades;
 
 
+use App\Services\AdminService;
 use Illuminate\Support\Facades\Facade;
 
 class AdminServiceFacade extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return 'AdminService';
+        return AdminService::class;
     }
 }

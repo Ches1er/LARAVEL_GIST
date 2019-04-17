@@ -24,7 +24,7 @@ class AdminService
     }
 
     public function FindUser($name){
-        return User::where('name',$name)->first();
+        return User::where('name','like',$name.'%')->first();
     }
 
     public function BanUser($id){
