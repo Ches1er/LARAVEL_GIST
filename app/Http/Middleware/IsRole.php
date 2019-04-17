@@ -17,9 +17,9 @@ class IsRole
     public function handle($request, Closure $next,$role)
     {
         $user_roles = Auth::user()->roles();
-        $isAdmin = false;
-        if (in_array($role,$user_roles))$isAdmin = true;
-        if (Auth::user() &&  $isAdmin) {
+        $isRole = false;
+        if (in_array($role,$user_roles))$isRole = true;
+        if (Auth::user() &&  $isRole) {
             return $next($request);
         }
         return redirect('/notadmin');
