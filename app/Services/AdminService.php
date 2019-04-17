@@ -16,12 +16,10 @@ use Illuminate\Support\Facades\DB;
 
 class AdminService
 {
-    private static $ins = null;
-    public static function instance()
-    {
-        return self::$ins === null ? self::$ins = new self() : self::$ins;
-    }
-    private function __construct()
+    /**
+     * AdminService constructor.
+     */
+    public function __construct()
     {
     }
 

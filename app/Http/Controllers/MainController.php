@@ -9,6 +9,7 @@ use App\User;
 use DemeterChain\Main;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Facades\AdminServiceFacade;
 
 class MainController extends Controller
 {
@@ -33,7 +34,7 @@ class MainController extends Controller
 
     public function actionAdmin(Request $request){
         is_null($request->get("name"))?$found_user=null:
-            $found_user=AdminService::instance()->FindUser($request->get("name"));
+            $found_user=AdminServiceFacade::FindUser($request->get("name"));
         $user_roles=MainService::instance()->getRoles();
         $categories = MainService::instance()->getCategories();
         return view("admin",["user_roles"=>$user_roles,
