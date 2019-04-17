@@ -34,6 +34,7 @@ class GistService
         });
 
     }
+
     public function delGist($gistid){
         DB::transaction(function() use ($gistid){
             DB::table('gists')->where("id",$gistid)->delete();

@@ -8,6 +8,6 @@
 and you will be able to post gists.
 <br>
 <br>
-&nbsp&nbsp&nbsp<a href="{{$url}}">{{$url}}</a>
+&nbsp&nbsp&nbsp<a href="{{$url}}"></a>
 
 

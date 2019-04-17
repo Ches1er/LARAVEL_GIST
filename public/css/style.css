@@ -401,12 +401,52 @@ form>div{
     border-radius: 5px;
     box-sizing: border-box;
 }
+
 .admin_block{
-    width: auto;
+    width: 50%;
     display: inline-flex;
     flex-flow: column;
     padding: 10px;
     box-sizing: border-box;
+}
+
+.admin_block form{
+    display: inline-flex;
+    flex-flow: column;
+}
+.admin_block form input[type='submit']{
+    width: 100px;
+}
+
+.found_user_table{
+    margin-top: 10px;
+    box-sizing: border-box;
+    width: 100%;
+}
+.found_user_table td{
+    border: #1a72ce 1px solid;
+    padding: 2px;
+    font-family: 'PT Sans Narrow', sans-serif;
+    text-align: center;
+}
+.found_user_table th{
+    border: #1a72ce 1px solid;
+    padding: 2px;
+    font-family: 'PT Sans Narrow', sans-serif;
+    text-align: center;
+}
+.col_login{
+    width: 30%;
+}
+.col_email{
+    width: 50%;
+}
+.col_status{
+    width: 20%;
+}
+.found_user_ban{
+    display: inline-flex;
+    flex-flow: row nowrap;
 }
 
     /*Pagination*/

@@ -22,6 +22,9 @@
     <nav>@yield("menu")</nav>
     <h3>{{Auth::user()->name}}'s Profile</h3>
     <div class="main_profile_content">
+        @if(Auth::user()->email_verified_at===null)
+            <div class="page_error_text">Your email doesnt verified. You cant publish gists.</div>
+        @endif
         <div class="upic"><img class="large_avatar" src="{{$upic_path->path}}" alt=""></div>
         <div class="changepic">
             <h3>Change user picture</h3>

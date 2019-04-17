@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\CategoryService;
 use App\Services\MainService;
 use App\Services\GistService;
 use Illuminate\Http\Request;
@@ -36,8 +37,17 @@ class MygistsController extends Controller
 
     public function actionAddgist(Request $request){
         $date = time();
+
+        if (is_null($request->post("category_name_new"))){
+            $category_id = $request->post("category_name");
+        }
+        else {
+            $category_id = CategoryService::instance()->
+                    addCategory($request->post("category_name_new"));
+        }
+
         $data = ["user_id"=>Auth::id(),
-                    "category_id"=>$request->post("category_name"),
+                    "category_id"=>$category_id,
                     "desc"=>$request->post("gist_desc"),
                     "name"=>$request->post("gist_name"),
                     "date"=>$date];

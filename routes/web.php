@@ -21,15 +21,21 @@ Route::get('/showcat/{caturl}', "MainController@actionIndex")->name("main_catego
 Route::get('/profile', "MainController@actionProfile")->middleware('isValidUser')->name("profile");
 
     //Admin
-Route::get('/admin', "MainController@actionAdmin")->middleware("auth","check_role:Admin")->name("admin");
-Route::post("/addnewcat","AdminController@actionAddnewcat")->middleware("auth","admin")->name("addcat");
-Route::get("/finduser","AdminController@actionFindUser")->middleware("auth","admin")->name("finduser");
+Route::prefix('admin')->middleware(["auth","check_role:Admin"])->
+        group(function (){
+            Route::get('',"MainController@actionAdmin")->name("admin");
+            Route::post('/ban', "AdminController@actionBanUser")->name('ban');
+            Route::post('/unban', "AdminController@actionUnbanUser")->name("unban");
+});
+
 Route::get('/notadmin',function (){
     return view('errors.notadmin');
 })->name('notadmin');
 
     //Categories
 Route::get('/showcat/{caturl}', "MainController@actionIndex")->name("showcat");
+Route::post("/addnewcat","AdminController@actionAddnewcat")->middleware('auth')->name("addcat");
+Route::post("/changecatname","AdminController@actionChangecatname")->middleware(['auth',"check_role:Admin"])->name("changecatname");
 
     //Show gist,file
 Route::get("/showgist/{gistid}","GistController@actionShowgist")->name("showgist");
@@ -67,7 +73,9 @@ Route::get('/invalid_user',function (){
     return view('errors.invalid_user');
 })->name('invalid_user');
 
-//Email test
+
+
+//Email browser test
 
 Route::get('/mail',function(){
     $invoice = ["name"=>"Ivan","remember_token"=>"token"];

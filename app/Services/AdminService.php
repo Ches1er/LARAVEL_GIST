@@ -25,11 +25,23 @@ class AdminService
     {
     }
 
-    public function AddCategory($name){
-        Category::create(["name"=>$name]);
+    public function FindUser($name){
+        return User::where('name',$name)->first();
     }
 
-    public function FindUser($name){
-        return DB::table("users")->where('name',$name)->first();
+    public function BanUser($id){
+        DB::table('user_roles')->where('user_id',$id)->
+            update(['role_id'=>3]);
+    }
+
+    public function UnbanUser($id){
+
+        DB::table('user_roles')->where('user_id',$id)->
+            update(['role_id'=>2]);
+    }
+
+    public function ChangeCategoryName($old_name,$new_name){
+        DB::table('categories')->where('name',$old_name)->
+            update(['name'=>$new_name]);
     }
 }

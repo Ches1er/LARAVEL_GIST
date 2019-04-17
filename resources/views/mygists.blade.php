@@ -38,7 +38,7 @@
 
     <div class="main_content">
         <div class="add_new">
-            <p class="add_new_p">Add new gist</p>
+            <h3>Add new gist</h3>
             <form action="{{route("addgist")}}" method="post">
                 @csrf
                 Pick category:<select name="category_name" id="">
@@ -46,6 +46,7 @@
                     <option value="{{$category->id}}">{{$category->name}}</option>
                     @endforeach
                 </select>
+                Or create new:<input type="text" name="category_name_new">
                 Add gist name:<input type="text" name="gist_name">
                 Add gist desc:<textarea name="gist_desc"></textarea>
                 <input type="submit" value="Add">
