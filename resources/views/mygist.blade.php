@@ -37,11 +37,11 @@
                 @endforelse
             </ul>
             <div class="add_new">
-                <p class="add_new_p">Add new file</p>
+                <h3>Add new file</h3>
                 <form action="files/addfile" method="post">
                     @csrf
                     <input type="hidden" name="gist_id" value="{{$gist->id}}">
-                    Add file name:<input type="text" name="file_name">
+                    Add file name:<input type="text" name="file_name" placeholder="File name...">
                     Add file content:<textarea name="file_content"></textarea>
                     <input type="submit" value="Add">
                 </form>

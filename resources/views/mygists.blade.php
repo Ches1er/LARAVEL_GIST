@@ -46,9 +46,9 @@
                     <option value="{{$category->id}}">{{$category->name}}</option>
                     @endforeach
                 </select>
-                Or create new:<input type="text" name="category_name_new">
-                Add gist name:<input type="text" name="gist_name">
-                Add gist desc:<textarea name="gist_desc"></textarea>
+                Or create new:<input type="text" name="category_name_new" placeholder="New category name...">
+                Add gist name:<input type="text" name="gist_name" placeholder="Gist name...">
+                Add gist description:<textarea name="gist_desc"></textarea>
                 <input type="submit" value="Add">
             </form>
         </div>

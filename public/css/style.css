@@ -135,8 +135,13 @@ aside a:hover {
     width: 100%;
     box-shadow: 2px 2px 3px 0px rgba(107,107,107,1);
     box-sizing: border-box;
-    padding: 5px;
+    padding: 25px 5px;
     border-radius: 5px;
+    font-family: 'Righteous', cursive;
+    font-size: x-large;
+    color: #229aee;
+    background-color: #fff;
+    text-align: center;
 }
 .gists{
     width: 100%;

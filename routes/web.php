@@ -17,9 +17,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', "MainController@actionIndex")->name("main");
 Route::get('/showcat/{caturl}', "MainController@actionIndex")->name("main_categories");
 
-    //Profile
-Route::get('/profile', "MainController@actionProfile")->middleware('isValidUser')->name("profile");
-
     //Admin
 Route::prefix('admin')->middleware(["auth","check_role:Admin"])->
         group(function (){
@@ -34,7 +31,7 @@ Route::get('/notadmin',function (){
 
     //Categories
 Route::get('/showcat/{caturl}', "MainController@actionIndex")->name("showcat");
-Route::post("/addnewcat","AdminController@actionAddnewcat")->middleware('auth')->name("addcat");
+Route::post("/addnewcat","AdminController@actionAddnewcat")->middleware(['auth','isValidUser'])->name("addcat");
 Route::post("/changecatname","AdminController@actionChangecatname")->middleware(['auth',"check_role:Admin"])->name("changecatname");
 
     //Show gist,file
@@ -42,7 +39,7 @@ Route::get("/showgist/{gistid}","GistController@actionShowgist")->name("showgist
 Route::get("/showfile/{fileid}","GistController@actionShowfile")->name("showfile");
 
     //My gists
-Route::prefix('mygists')->middleware('isValidUser')->group(function (){
+Route::prefix('mygists')->middleware(['auth','isValidUser'])->group(function (){
     Route::get('', "MygistsController@actionMygists")->name("mygists");
     Route::get('/showcat/{caturl}', "MygistsController@actionMygists")->name("mygists_categories");
     Route::get('/{gistid}', "MygistsController@actionShowgist")->name("showmygist");
@@ -59,8 +56,9 @@ Route::prefix('mygists')->middleware('isValidUser')->group(function (){
 });
 
 //Profile
-Route::post('/addpic',"ProfileController@actionAddpic")->name("addpic");
-Route::put('/changename',"ProfileController@actionChangename")->name("changename");
+Route::get('/profile', "MainController@actionProfile")->middleware(['auth','isValidUser'])->name("profile");
+Route::post('/addpic',"ProfileController@actionAddpic")->middleware(['auth','isValidUser'])->name("addpic");
+Route::put('/changename',"ProfileController@actionChangename")->middleware(['auth','isValidUser'])->name("changename");
 
 /*vendor/laravel/framework/src/illuminate/routing/router.php
 1149 string */

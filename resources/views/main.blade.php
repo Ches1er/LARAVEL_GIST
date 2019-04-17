@@ -36,7 +36,7 @@
         </aside>
 
         <div class="main_content">
-            <div class="about_resource">About</div>
+            <div class="about_resource">Instantly share code, notes, and snippets.</div>
             <div class="gists">
             @forelse($gists as $gist)
                 <div class="full_info_container">
