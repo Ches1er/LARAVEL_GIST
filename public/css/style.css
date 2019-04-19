@@ -334,7 +334,7 @@ form>div{
     font-family: 'Poppins', sans-serif;
     margin-bottom: 5px;
 }
-.login_register_error{
+.validation_error{
     color: red;
     font-family: 'Dosis', sans-serif;
     font-weight: bold;

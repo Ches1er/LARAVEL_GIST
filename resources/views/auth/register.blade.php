@@ -9,7 +9,7 @@
             <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus>
 
             @if ($errors->has('name'))
-                <span class="login_register_error">
+                <span class="validation_error">
                     <strong>{{ $errors->first('name') }}</strong>
                 </span>
             @endif
@@ -18,7 +18,7 @@
                 <input id="email" type="email" name="email" value="{{ old('email') }}" required>
 
                 @if ($errors->has('email'))
-                    <span class="login_register_error">
+                    <span class="validation_error">
                         <strong>{{ $errors->first('email') }}</strong>
                     </span>
             @endif
@@ -27,7 +27,7 @@
                 <input id="password" type="password" name="password" required>
 
                 @if ($errors->has('password'))
-                    <span class="login_register_error">
+                    <span class="validation_error">
                         <strong>{{ $errors->first('password') }}</strong>
                     </span>
             @endif

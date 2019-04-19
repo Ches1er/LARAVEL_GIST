@@ -6,7 +6,7 @@
             <form class="login_register_form" action="{{ route('login') }}" method="post">
                 @csrf
                 @if(session()->has('login_error'))
-                    <span class="login_register_error">
+                    <span class="validation_error">
                         {{ session()->get('login_error') }}
                     </span>
                 @endif
@@ -22,7 +22,7 @@
                 <label for="password">Password</label>
                     <input id="password" type="password" class="form-control" name="password">
                     @if ($errors->has('password'))
-                        <span class="login_register_error">
+                        <span class="validation_error">
                             <strong>{{ $errors->first('password') }}</strong>
                         </span>
                     @endif

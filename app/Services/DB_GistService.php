@@ -11,6 +11,7 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\DB;
 use App\Contracts\GistService;
+use Illuminate\Support\Facades\Validator;
 
 class DB_GistService implements GistService
 {
@@ -21,9 +22,22 @@ class DB_GistService implements GistService
         return DB::table("files")->where("gist_id",(int)$gist_id)->get();
     }
     public function addGist(array $data){
-        DB::transaction(function() use ($data){
-            DB::table('gists')->insert($data);
+        $validator=Validator::make($data,[
+            'gist_desc'=>'required|min:3',
+            'gist_name'=>'required|min:3',
+        ]);
+        if ($validator->fails()){
+            return redirect()->route('mygists')
+                ->withErrors($validator)
+                ->withInput();
+        }
+        else {
+            DB::transaction(function() use ($data){
+                DB::table('gists')->insert($data);
+
         });
+            return redirect()->route('mygists');
+        }
 
     }
     public function delGist($gistid){

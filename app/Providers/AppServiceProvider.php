@@ -7,7 +7,7 @@ use App\Providers\Custom\CategoryServiceProvider;
 use App\Providers\Custom\FileServiceProvider;
 use App\Providers\Custom\GistServiceProvider;
 use App\Providers\Custom\MainServiceProvider;
-
+use App\Providers\Custom\ValidationServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
@@ -25,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->register(FileServiceProvider::class);
         $this->app->register(GistServiceProvider::class);
         $this->app->register(MainServiceProvider::class);
+        $this->app->register(ValidationServiceProvider::class);
     }
 
     /**

@@ -1,0 +1,274 @@
+        Отправка электронной почты при помощи Laravel
+
+        Настройка параметров отправки
+
+1. Настройку можно производить в файле .env
+Все настройки, которые начинаются на MAIL_.
+2. В контроллере, который обрабатывает отправку, перед: Mail::to
+прописываем изменения в конфигурационном файле:
+
+!!! ПОСЛЕ ИЗМЕНЕНИй В КОНФИГУРАЦИИ .env НЕ ЗАБЫВАЕМ В КОНСОЛИ ВЫПОЛНИТЬ
+            КОМАНДУ php artisan config:cache  !!!
+
+public function actionMail(){
+        $user = ['name'=>'Ivan','token'=>'12345'];
+
+        config(['mail.username' => 'myblogtestemail@gmail.com']);
+        config(['mail.password' => 'testemail']);
+
+        Mail::to('shop@ukrpolystroy.com.ua')->send((new OrderShipped($user)));
+    }
+
+Таким образом мы можем использовать разные учетные данные почты, для
+разнообразных рассылок.
+
+В Ларавел каждый тип отправки почты должен представлять собой отдельный класс.
+Все они хранятся в папке app/Mail.
+Создание класса происходит при выполнении команды:
+php artisan make:mail OrderShipped
+
+        Работа с классом
+
+Вся работа происходит в методе build.
+В этом методе вы можете вызывать различные методы (from, subject, view, and attach)
+для конфигурации вашего письма.
+
+        Конфигурация отправки
+
+Сконфигурируем отправщика. Во-первых необходимо испоьзовать метод:from
+public function build()
+{
+    return $this->from('example@example.com')
+                ->view('emails.orders.shipped');
+}
+
+Если у вас один адрес для всех отправок, то нет смысла вызывать метод from
+во всех отправках, легче один раз сконфигурировать переменную from в
+конфигурационном файле config/mail.php
+'from' => ['address' => 'example@example.com', 'name' => 'App Name'],
+
+Также в том же файле можно сконфигурировать и адрес куда будут приходить
+письма ответа:
+'reply_to' => ['address' => 'example@example.com', 'name' => 'App Name'],
+
+        Конфигурация тела письма
+
+В методе build, вы можете использовать метод view, для конфигурации вида
+письма, которое будет приходить к пользователю.
+Если у вас несколько вьюшек для разных писем, удобно сделать папку
+resources/views/emails и хранить их там.
+
+Если есть необходимость в plain-text версии письма, то оно подключается:
+через метод text.
+return $this->view('emails.orders.shipped')
+                ->text('emails.orders.shipped_plain');
+
+         Проброс данных в тело письма
+
+Как правило нам надо использовать в письме какие-то данные (номер заказа,
+имя пользователя и пр.). Существует 2 вариант как это сделать:
+
+1 Вариант.
+
+Любые public properties определенные в классе, могут быть использованы,
+например можно пробросить в конструктор какие-либо данные и пробрасывать их
+в письмо.
+public $order;
+public function __construct(Order $order)
+    {
+        $this->order = $order;
+    }
+public function build()
+    {
+        return $this->view('emails.orders.shipped');
+    }
+
+Если данные определены как public property они могут автоматически использоваться
+во вьшке:
+<div>
+    Price: {{ $order->price }}
+</div>
+
+2. Вариант
+
+Используя метод with. Если вы хотите изменить данные, которые поступают
+к вам через конструктор, вы можете использовать для этого метод with.
+Вы также можете пробросить данные через конструктор, но необходимо установить
+свойство как protected или private, но данные автоматически не будут
+доступны во вьшке, поэтому необходимо пробрасывать в методе массив с данными
+и потом их использовать во вью.
+
+public function build()
+    {
+        return $this->view('emails.orders.shipped')
+                    ->with([
+                        'orderName' => $this->order->name,
+                        'orderPrice' => $this->order->price,
+                    ]);
+    }
+
+Во вью доступ к данным будет осуществляться селдующим образом:
+<div>
+    Price: {{ $orderPrice }}
+</div>
+
+        Прикрепленные файлы
+
+В письме иногда есть необходимость прикреплять какие-то файлы
+(например счет для оплаты), для этого используется метод attach,
+в котором прописывается полный путь к файлу.
+Например у нас файл лежит в папке public/files
+
+public function build()
+{
+        $path = public_path()."/"."robots.txt";
+
+        return $this->from('my@my.com',"MYMY")->
+        view('mail.shipped')->attach($path);
+}
+В добавок к этому вы также можете отправить как отображать файл и(или)
+MIME type файла, прикрепив вторым аргументом массив с этими данными:
+
+ return $this->view('emails.orders.shipped')
+                ->attach('/path/to/file', [
+                    'as' => 'name.pdf',
+                    'mime' => 'application/pdf',
+                ]);
+
+Если необходимо прикрепить файл, который находится на однои из ваших
+filesystem disks используется attachFromStorage метод.
+
+        Прикрепление картинок
+
+Ларавел предлагает удобный способ, как подключить картинку к шаблону
+письма.
+Для этого используется embed метод к переменной $message в самом шаблоне
+
+<body>
+    Here is an image:
+
+    <img src="{{ $message->embed($pathToImage) }}">
+</body>
+
+        Использование Markdown для создания шаблона письма
+
+Для генерации шаблона, используйте следующую команду при создании класса
+подготовки отправки.
+php artisan make:mail OrderShipped --markdown=emails.orders.shipped
+
+После этого в методе build() вместо метода view используйте markdown
+ return $this->from('example@example.com')
+                ->markdown('emails.orders.shipped');
+
+Шаблон письма будет выглядеть следующим образом:
+@component('mail::message')
+# Order Shipped
+
+Your order has been shipped!
+
+@component('mail::button', ['url' => $url])
+View Order
+@endcomponent
+
+Thanks,<br>
+{{ config('app.name') }}
+@endcomponent
+
+Обратите внимание, переменная app.name - изменяется в файле .env
+
+        Компонент "Кнопка"
+
+Представляет собой отцентрированную кнопку с ссылкой. Принимает 2 аргумента
+url и color. color - primary, success, and error.
+
+@component('mail::button', ['url' => $url, 'color' => 'success'])
+View Order
+@endcomponent
+
+        Компонент "Панель"
+
+Рендерит блок с текстом, который немного отличается фоном, можно писать
+любой текст
+
+@component('mail::panel')
+This is the panel content.
+@endcomponent
+
+        Компонент "Таблица"
+
+@component('mail::table')
+| Laravel       | Table         | Example  |
+| ------------- |:-------------:| --------:|
+| Col 2 is      | Centered      | $10      |
+| Col 3 is      | Right-Aligned | $20      |
+@endcomponent
+
+
+        Отправка письма
+
+Для отправки письма используется метод to для фасада Mail.
+Этот метод может принимать электронную почту получателя или экземпляр
+пользователя. В последнем случае метод будет использовать поля email and name
+этого экземпляра, главное, чтоб эти поля назывались именно таким образом.
+Как только мы определили эти данные, исспользуем метод send, в котором
+передаем наш экземпляр отправщика почты и передаем в него необходимые данные.
+
+public function ship(Request $request, $orderId)
+    {
+        $order = Order::findOrFail($orderId);
+
+        // Ship order...
+
+        Mail::to($request->user())->send(new OrderShipped($order));
+    }
+
+В методе to можно использовать не только один адрес почты, но также
+можно устанавливать "to", "cc", и "bcc" получателей.
+
+Mail::to($request->user())
+    ->cc($moreUsers)
+    ->bcc($evenMoreUsers)
+    ->send(new OrderShipped($order));
+
+        Предпросмотр письма в браузере
+
+Создаем отдельный роут и там получить вид нашего письма
+
+Route::get('mailable', function () {
+    $invoice = App\Invoice::find(1);
+
+    return new App\Mail\InvoicePaid($invoice);
+});
+
+        Отправка писем в очереди
+
+Mail::to($request->user())
+    ->cc($moreUsers)
+    ->bcc($evenMoreUsers)
+    ->queue(new OrderShipped($order));
+
+        Задержка отправки письма
+
+Если необходимо отправить письмо с задержкой, используется метод later,
+в котором в качестве первого аргумента передается экземпляр класса DateTime
+в котором указывается временной лаг отправки.
+
+$when = now()->addMinutes(10);
+
+Mail::to($request->user())
+    ->cc($moreUsers)
+    ->bcc($evenMoreUsers)
+    ->later($when, new OrderShipped($order));
+
+        Установка локали
+
+Ларавел позволяет вам устанавливать в письме локаль отдельную от приложения
+и даже запоминать эту локаль если письмо отправлено в очередь. Для этого
+в фасаде Mail используется метод locale, в котором и устанавливается
+необходимая локаль.
+
+Mail::to($request->user())->locale('es')->send(
+    new OrderShipped($order)
+);
+
+

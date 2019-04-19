@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Contracts\MainService;
 use App\Contracts\CategoryService;
 use App\Contracts\GistService;
+use App\Facades\Validation;
 
 class MygistsController extends Controller
 {
@@ -58,14 +59,12 @@ class MygistsController extends Controller
             $category_id = $this->categoryservice->
                     addCategory($request->post("category_name_new"));
         }
-
-        $data = ["user_id"=>Auth::id(),
-                    "category_id"=>$category_id,
-                    "desc"=>$request->post("gist_desc"),
-                    "name"=>$request->post("gist_name"),
-                    "date"=>$date];
-        $this->gistservice->addGist($data);
-        return redirect()->route("mygists");
+            $data = ["user_id"=>Auth::id(),
+                "category_id"=>$category_id,
+                "gist_desc"=>$request->post("gist_desc"),
+                "gist_name"=>$request->post("gist_name"),
+                "date"=>$date];
+        return $this->gistservice->addGist($data);
     }
 
     public function actionDelgist($gistid){

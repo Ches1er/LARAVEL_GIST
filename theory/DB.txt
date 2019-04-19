@@ -1,0 +1,223 @@
+        Работа с базой данных
+
+    1. Самый простой метод.
+    Для того, чтобы получить данные из БД, необходимо написать:
+$var = DB::select("SELECT * FROM `posts`",[params]);
+[params] - не обязателен
+Результатом будет коллекция объектов. Т.е. ко всем св-вам можно будет достучаться
+при помощи $foo->name.
+
+    Удаление из БД
+Обратите внимание, что если мы реализуем метод "delete", в форме HTML такого
+метода не существует, поэтому мы должны подменить метод след образом.
+<form action="/" method="post">
+@method("delete")
+@csrf
+input type="submit"
+</form>
+Для того, чтобы удалить из БД, необходимо выполнить след запрос:
+        /*Если мы например хотим обратиться не к подключению по умолчанию
+        * используется DB::connection("подключение")
+        */
+        DB::connection("mysql")->delete("DELETE FROM `posts`
+            WHERE `id`=:id",["id"=>(int)$postid]);
+
+    Добавление в БД
+Добавление осуществляется методом пост.
+DB::insert("INSERT INTO `posts` SET `user_id`=:user_id,`name`=:name,
+                    `content`=:content",["user_id"=>1,
+                            "name"=>$request["name"],
+                            "content"=>$request['content']]);
+
+    Транзакции в Laravel
+1. Вариант:
+try{
+    DB::beginTransaction();
+        DB::insert...;
+        DB::insert...;
+    DB::commit();
+} catch (\Exception $e) {
+    DB::rollback();
+}
+2. Вариант:
+DB::transaction(function() use ($id){
+    DB::insert...;
+})
+Есть некоторые базы, вроде Постгрес, у которых при ошибке в транзакции
+валится подключение к БД, поэтому там необходимо использовать:
+    DB::reconnect("параметры");
+В тяжелых задачах есть также смысл после выполнения транзакции отключаться
+от БД:
+    DB::disconnect();
+При следующем запросе PHP самостоятельно подключится к БД.
+
+    2. Второй способо работы с ДБ. Database QueryBuilder
+
+1. Для получения данных.
+    DB::table('posts')->get();
+Также работает масса методов Where,orWhere,Group By и тд.
+
+2. Для добавления данных
+    DB::table("posts")->insert(["user_id"=>1,
+                "name"=>$request["name"],
+                "content"=>$request['content']]);
+
+    Есть очень полезный метод insertGetId, он добавляет строку в таблицу и
+    возвращает id`s.
+
+    $id = DB::table('users')->insertGetId(
+        ['email' => 'john@example.com', 'votes' => 0]
+    );
+
+3. Для удаления данных
+  DB::table("posts")->delete($postid);
+
+4. Для обновления данных
+   DB::table('users')
+               ->where('id', 1)
+               ->update(['votes' => 1]);
+
+5. Обновление или добавление
+
+    DB::table('users')
+        ->updateOrInsert(
+            ['email' => 'john@example.com', 'name' => 'John'],
+            ['votes' => '2']
+        );
+
+        Некоторые полезные особенности
+
+        Одно значение одной колонки
+Если у нас есть необходимость в значении какой-то одной колонки, то нам не
+обязательно вытаскивать всю коллекцию, можно обратиться к колонке:
+$email = DB::table('users')->where('name', 'John')->value('email');
+
+        Все значения одной колонки
+Если нам необходимо вытащить коллекцию со значениями одной колонки:
+$titles = DB::table('roles')->pluck('title');
+
+foreach ($titles as $title) {
+    echo $title;
+}
+Можно задатб значения ключа в этом массиве, вторым аргументом
+$roles = DB::table('roles')->pluck('title', 'name');
+foreach ($roles as $name => $title) {
+    echo $title;
+}
+
+        Аггрегатные функции
+
+$users = DB::table('users')->count();
+$price = DB::table('orders')->max('price');
+Проверка на существование записи: DB::table('orders')->where('finalized', 1)->exists();
+
+        Select
+
+Не обязательно всегда вытаскивать из БД все колонки, можно воспользоваться
+методом select().
+$users = DB::table('users')->select('name', 'email as user_email')->get();
+Если мы уже имеем сущность DB, то мы можем отдельным запросом добавить в
+выборку еще одну колонку:
+$query = DB::table('users')->select('name');
+$users = $query->addSelect('age')->get();
+
+        Join
+
+Для использования базового inner join можно использовать метод join(),
+первый аргумент - имя таблицы, которую мы хотим присоединить, последующие
+это колонки, которые связывают таблицы.
+$users_posts = DB::table('posts')
+     ->join("users","users.id","=","posts.user_id")->get();
+Метод select выберет колонки, которые нам необходимы.
+Left, Right Join аналогично.
+  Where в Join
+DB::table('users')
+        ->join('contacts', function ($join) {
+            $join->on('users.id', '=', 'contacts.user_id')
+                 ->where('contacts.user_id', '>', 5);
+        })
+        ->get();
+
+        WHERE
+
+Вы можете использовать метод where, для добавления where в запрос.
+Базовая версия использует 3 аргумента (имя колонки, знак, значение).
+Знак равно можно убрать, он используется по-умолчанию. Также можно использовать
+Like:
+$users = DB::table('users')
+                ->where('name', 'like', 'T%')
+                ->get();
+Аргументы можно передавать в виде массива:
+$users = DB::table('users')->where([
+    ['status', '=', '1'],
+    ['subscribed', '<>', '1'],
+])->get();
+
+        OR WHERE
+
+Мы можете создавать цепочку из OrWhere методов, порядок аргументов такой же.
+
+        Additional Where Clauses
+
+Существуют следующие методы по работе с where:
+whereBetween('votes', [1, 100]), whereNotBetween,whereIn('id', [1, 2, 3]),
+whereNotIn, whereNull,whereNotNull
+
+        whereDate / whereMonth / whereDay / whereYear / whereTime
+
+Данные метод могут использоваться для сравнения колонок с датами и какой-либо
+даты переданной в качестве аргумента.
+
+$users = DB::table('users')
+                ->whereDate('created_at', '2016-12-31')
+                ->get();
+
+$users = DB::table('users')
+                ->whereTime('created_at', '=', '11:20:45')
+                ->get();
+
+        ORDER BY
+
+$users = DB::table('users')
+                ->orderBy('name', 'desc')
+                ->get();
+Существуют интересные методы latest и oldest, позволяющие легко
+сортировать данные по дате колонки created_at.
+Например следуюший пример выберет самую последнюю созданную запись.
+$user = DB::table('users')
+                ->latest()
+                ->first();
+Метод inRandomOrder, позволяет упорядочивать результаты выборки рандомно
+Может использоваться например для рандомного выбора пользователя.
+$randomUser = DB::table('users')
+                ->inRandomOrder()
+                ->first();
+
+         GROUP BY, HAVING
+
+GroupBy и having методы могут быть использованы для группировки результатов
+выборки. Метод having имеет такой же синтаксис, что и where.
+$users = DB::table('users')
+                ->groupBy('account_id')
+                ->having('account_id', '>', 100)
+                ->get();
+
+         OFFSET AND LIMIT. SKIP AND TAKE
+
+Для пропуска какого-то кол-ва строк и выбора какого-то кол-ва строк
+Можно исспользовать как оффсет с лимитом, так и скип и тейк.
+
+        Increment & Decrement
+
+Иногда, когда надо уменьшить(увеличить) какое-либо значение, удобно использовать
+методы increment(decrement)
+DB::table('users')->increment('votes');
+DB::table('users')->decrement('votes');
+
+
+
+
+
+
+
+

@@ -1,0 +1,18 @@
+        Создаем интерфейс, сервис, контейнер сервисов и провайдер
+
+1. Создадим директорию Contracts.
+В ней создадим интерфейс ServiceName. Объявим в нем необходимые методы.
+2. В директории Services создадим сервис, например DBServiceName, который будет реализовывать
+интерфейс ServiceName, реализуем методы.
+3. В терминале запустим команду: php artisan make:provider ServiceNameProvider.
+Это провайдер появится в папке Providers.
+Заходим в него и в методе register регистрируем наш сервис,
+$this->app->bind('App\Contracts\ServiceName',
+'App\Services\DBServiceName'
+);
+4. В app.php в массиве providers регистрируем провайдер
+5. в AppServiceProvider в функции register тоже регистрируем провайдер
+       public function register()
+       {
+           $this->app->register(ProviderName::class);
+6. Далее в любом из контроллеров, в метод передаем (ContractName $contractName) и работаем с ним.

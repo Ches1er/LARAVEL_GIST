@@ -46,9 +46,16 @@
                     <option value="{{$category->id}}">{{$category->name}}</option>
                     @endforeach
                 </select>
-                Or create new:<input type="text" name="category_name_new" placeholder="New category name...">
-                Add gist name:<input type="text" name="gist_name" placeholder="Gist name...">
+                Or create new:<input type="text" name="category_name_new" placeholder="New category name..." value="{{old('category_name_new')}}">
+                Add gist name:<input type="text" name="gist_name" placeholder="Gist name..." value="{{old('gist_name')}}">
+                @if($errors->has('gist_name'))
+                    <span class="validation_error">{{$errors->first('gist_name')}}</span>
+                    @endif
                 Add gist description:<textarea name="gist_desc"></textarea>
+                @if($errors->has('gist_desc'))
+                    <span class="validation_error">{{$errors->first('gist_desc')}}</span>
+
+                @endif
                 <input type="submit" value="Add">
             </form>
         </div>

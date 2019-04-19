@@ -1,0 +1,69 @@
+        Создание авторизации из "коробки"
+
+1. php artisan make:auth
+2. Появляются новые роуты в файле web.php
+(сами роуты лежат в /*vendor/laravel/framework/src/illuminate/routing/router.php
+1149 string */)
+3. Повляются типовые вьюшки для логин/регистр/кнопка логаут
+4. Появляются контроллеры в http/controllers/auth
+
+        Изменение параметра входа с емэйла на имя пользователя.
+1. Идем в LoginController, он использует трейт AuthenticateUsers
+идем в него и смотрим.
+В этом трейте есть метод, который возвращает вьюшку showLoginForm
+можем перезаписать этот метод и подставить свою.
+2. Там же в конце есть метод username, перезаписываем этот метод
+в LoginController, но указываем не return 'email', а return 'name'
+Нажмаем Ктрл+О, перезаписываем метод.
+3. Идем в форму логин и все меняем с емайл на нейм.
+
+        Изменение проверки на уникальность при регистрации.
+        Изменение кол-ва символов для пароля
+
+По умолчанию проверка на уникальность имени стоит на емайл.
+Нам надо поменять проверку по имени.
+Идем в RegisterController и в методе validator, убираем из
+массива 'email', значение 'unique:users' и добавляем его в
+массив 'name'. Также в этом методе мы можем изменить кол-во
+символов, которое требуется для пароля.
+
+        Тексты ошибок при валидации
+
+Resources/lang/en/validation.php
+В этом файле все ошибки валидаций. Со старта идет базовый набор
+Ниже идет массив custom, изменения вносятся именно в этом массиве
+Пишем ключ-имя аттрибута, потом массив, и в этом массиве пишем
+все возможные проверки, касаемо этого ключа.
+Например:
+'custom'=>[
+    'name'=>[
+    'unique'=>'This :attribute has been engaged'
+    ]
+]
+Еще ниже есть массив названий аттрибуттов, в нем мы можем
+давать псевдонимы для наших аттрибутов, например,
+'name'=>'user name'.
+После этого ошибка будет выглядеть как:
+"This user name has been engaged".
+
+
+        Проверка на роль админа
+
+1. php artisan make:middleware IsAdmin
+2. Идем в app/Http/Kernel.php и регистрируем псевдоним для
+нашего middleware: 'admin' => \App\Http\Middleware\IsAdmin::class,
+3. Правим middleware IsAdmin.
+
+public function handle($request, Closure $next)
+    {
+        $user_roles = Auth::user()->roles();
+        $isAdmin = false;
+        if (in_array("admin",$user_roles))$isAdmin = true;
+        if (Auth::user() &&  $isAdmin) {
+            return $next($request);
+        }
+        return redirect('/');
+    }
+
+4. В роутах делаем защищенный роут, используя наш middleware:
+Route::get('/admin', "MainController@actionAdmin")->middleware("auth")->middleware("admin")->name("admin");

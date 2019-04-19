@@ -1,0 +1,3 @@
+Создаем папку с проектом.
+В консоли переходим в эту папку, пишем composer create-project --prefer-dist laravel/laravel blog
+Есть встроенный сервер: php artisan serve
