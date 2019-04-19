@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Contracts\AdminService;
 use App\Contracts\MainService;
+use Illuminate\Support\Facades\Auth;
 
 class MainController extends Controller
 {
@@ -39,6 +40,14 @@ class MainController extends Controller
             "categories"=>$this->mainservice->getCategories(),
             "found_user"=>$found_user]
         );
+    }
+    public function actionLogout(Request $request)
+    {
+        Auth::guard()->logout();
+
+        $request->session()->invalidate();
+
+        return redirect('/');
     }
 }
 

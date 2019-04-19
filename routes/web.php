@@ -68,6 +68,8 @@ Auth::routes();
 Route::get('finalregister/{token}','Auth\FinalRegister@actionFinalRegister')->name('finalregister');
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::get('/_logout','MainController@actionLogout')->name('_logout');
+
 Route::get('/invalid_user',function (){
     return view('errors.invalid_user');
 })->name('invalid_user');

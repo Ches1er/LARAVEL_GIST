@@ -1,15 +1,20 @@
 @extends("layouts.default")
-@if(!empty($user_roles))
-    @if(in_array("admin", $user_roles))@include("layouts.menus.menu_admin")
-    @elseif(in_array("user", $user_roles))@include("layouts.menus.menu_auth")
+
+@guest
+    @include("layouts.menus.menu_guest")
+@else
+    @if(!is_null($user_roles))
+        @foreach($user_roles as $role)
+            @if($role === "Admin")
+                @include("layouts.menus.menu_admin")
+                @break
+            @else
+                @include("layouts.menus.menu_auth")
+            @endif
+        @endforeach
     @endif
-@endif
-@if(is_null($user))@include("layouts.menus.menu_guest")
-@endif
-@if(!is_null($user)&& empty($user_roles))@include("layouts.menus.menu_nonauth")
-@endif
-@if(is_null($user))@include("layouts.menus.menu_guest")
-@endif
+    @include("layouts.menus.menu_nonauth")
+@endguest
 
 @section("title","File")
 @section("content")

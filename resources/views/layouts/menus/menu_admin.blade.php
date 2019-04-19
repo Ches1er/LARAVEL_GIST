@@ -5,7 +5,7 @@
         <li><a href="{{route("profile")}}">Profile</a></li>
         <li><a href="{{route("mygists")}}">MyGists</a></li>
         <li><a href="{{route("admin")}}">Admin</a></li>
-        <li><a href="{{route("logout")}}">Logout</a></li>
+        <li><a href="{{route("_logout")}}">Logout</a></li>
     </ul>
 
 @endsection
