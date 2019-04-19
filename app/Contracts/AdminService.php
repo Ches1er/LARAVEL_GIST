@@ -15,4 +15,5 @@ interface AdminService
     public function BanUser($id);
     public function UnbanUser($id);
     public function ChangeCategoryName($old_name,$new_name);
+    public function VerifyEmail($id);
 }

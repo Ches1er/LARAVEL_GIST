@@ -37,6 +37,11 @@ class AdminController extends Controller
         return redirect()->route("admin");
     }
 
+    public function actionVerifyUserEmail(Request $request){
+        $this->adminservice->VerifyEmail($request->post("id"));
+        return redirect()->route("admin");
+    }
+
     public function actionChangecatname(Request $request){
         $this->adminservice->
             ChangeCategoryName($request->post("cat_name"),

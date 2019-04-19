@@ -25,7 +25,7 @@
         @if(Auth::user()->email_verified_at===null)
             <div class="page_error_text">Your email doesnt verified. You cant publish gists.</div>
         @endif
-        <div class="upic"><img class="large_avatar" src="{{$upic_path->path}}" alt=""></div>
+        <div class="upic"><img class="large_avatar" src="{{Auth::user()->getPic()->path }}" alt=""></div>
         <div class="changepic">
             <h3>Change user picture</h3>
             <form enctype="multipart/form-data" action="/addpic" method="POST">

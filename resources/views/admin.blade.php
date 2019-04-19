@@ -89,19 +89,26 @@
                         </table>
                         @if(in_array("Invalid",$found_user->roles()))
 
-                            <form class="found_user_ban" action="/admin/unban" method="post">
+                            <form class="found_user_action" action="/admin/unban" method="post">
                                 @csrf
                                 <input type="hidden" name="id" value="{{$found_user->id}}">
                                 <input type="submit" value="Unban user">
                             </form>
 
                             @else
-                        <form class="found_user_ban" action="/admin/ban" method="post">
+                        <form class="found_user_action" action="/admin/ban" method="post">
                             @csrf
                             <input type="hidden" name="id" value="{{$found_user->id}}">
                             <input type="submit" value="Ban user">
 
                         </form>
+                        @endif
+                        @if(is_null($found_user->email_verified_at))
+                            <form class="found_user_action" action="{{route('verify')}}" method="post">
+                                @csrf
+                                <input type="hidden" name="id" value="{{$found_user->id}}">
+                                <input type="submit" value="Verify user email">
+                            </form>
                         @endif
                     </div>
                     @endif

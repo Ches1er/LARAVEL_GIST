@@ -420,7 +420,7 @@ form>div{
     flex-flow: column;
 }
 .admin_block form input[type='submit']{
-    width: 100px;
+    width: 150px;
 }
 
 .found_user_table{
@@ -449,7 +449,7 @@ form>div{
 .col_status{
     width: 20%;
 }
-.found_user_ban{
+.found_user_action{
     display: inline-flex;
     flex-flow: row nowrap;
 }

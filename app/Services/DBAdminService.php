@@ -16,7 +16,7 @@ class DBAdminService implements AdminService
 {
 
     public function FindUser($name){
-        return User::where('name',$name)->first();
+        return User::where('name','like',$name.'%')->first();
     }
 
     public function BanUser($id){
@@ -33,5 +33,9 @@ class DBAdminService implements AdminService
     public function ChangeCategoryName($old_name,$new_name){
         DB::table('categories')->where('name',$old_name)->
             update(['name'=>$new_name]);
+    }
+    public function VerifyEmail($id){
+        DB::table('users')->where('id',$id)->
+        update(['email_verified_at'=>time()]);
     }
 }

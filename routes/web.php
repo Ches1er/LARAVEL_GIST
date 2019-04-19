@@ -23,6 +23,7 @@ Route::prefix('admin')->middleware(["auth","check_role:Admin"])->
             Route::get('',"MainController@actionAdmin")->name("admin");
             Route::post('/ban', "AdminController@actionBanUser")->name('ban');
             Route::post('/unban', "AdminController@actionUnbanUser")->name("unban");
+            Route::post('/verifyemail', "AdminController@actionVerifyUserEmail")->name("verify");
 });
 
 Route::get('/notadmin',function (){
