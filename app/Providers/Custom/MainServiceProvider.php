@@ -2,11 +2,11 @@
 
 namespace App\Providers\Custom;
 
-use App\Contracts\AdminService;
-use App\Services\DBAdminService;
 use Illuminate\Support\ServiceProvider;
+use App\Contracts\MainService;
+use App\Services\DBMainService;
 
-class AdminServiceProvider extends ServiceProvider
+class MainServiceProvider extends ServiceProvider
 {
     /**
      * Register services.
@@ -15,9 +15,7 @@ class AdminServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('App\Contracts\AdminService',
-            'App\Services\DBAdminService'
-        );
+        $this->app->bind(MainService::class,DBMainService::class);
     }
 
     /**

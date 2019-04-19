@@ -2,37 +2,50 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\CategoryService;
-use App\Services\MainService;
-use App\Services\GistService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use App\Contracts\MainService;
+use App\Contracts\CategoryService;
+use App\Contracts\GistService;
+
 class MygistsController extends Controller
 {
+
+    protected $mainservice;
+    protected $categoryservice;
+    protected $gistservice;
+
+    /**
+     * MygistsController constructor.
+     * @param MainService $mainService
+     * @param CategoryService $categoryservice
+     * @param GistService $gistservice
+     */
+    public function __construct(MainService $mainService,
+                                CategoryService $categoryservice,
+                                GistService $gistservice)
+    {
+        $this->mainservice = $mainService;
+        $this->categoryservice = $categoryservice;
+        $this->gistservice = $gistservice;
+    }
+
+
     public function actionMygists(Request $request,$caturl="all"){
-        $user_roles=MainService::instance()->getRoles();
-        $categories = MainService::instance()->getCategories();
-        $gists = MainService::instance()->getUserGists($caturl,Auth::id());
-        $files_count = MainService::instance()->getFilesCount();
         return view("mygists",[
-            "user_roles"=>$user_roles,
-            "gists"=>$gists,
-            "categories"=>$categories,
-            "files_count"=>$files_count
+            "user_roles"=>$this->mainservice->getRoles(),
+            "gists"=>$this->mainservice->getUserGists($caturl,Auth::id()),
+            "categories"=>$this->mainservice->getCategories(),
+            "files_count"=>$this->mainservice->getFilesCount()
         ]);
     }
 
     public function actionShowgist($gistid){
-        $user_roles = ["admin","user"];
-        $user = ["user_name"=>"Admin"];
-        $gist_content = GistService::instance()->getGist($gistid);
-        $files = GistService::instance()->getFiles($gistid);
         return view("mygist",[
-            "user_roles"=>$user_roles,
-            "user"=>$user,
-            "gist"=>$gist_content,
-            "files"=>$files]);
+            "user_roles"=>$this->mainservice->getRoles(),
+            "gist"=>$this->gistservice->getGist($gistid),
+            "files"=>$this->gistservice->getFiles($gistid)]);
     }
 
     public function actionAddgist(Request $request){
@@ -42,7 +55,7 @@ class MygistsController extends Controller
             $category_id = $request->post("category_name");
         }
         else {
-            $category_id = CategoryService::instance()->
+            $category_id = $this->categoryservice->
                     addCategory($request->post("category_name_new"));
         }
 
@@ -51,12 +64,12 @@ class MygistsController extends Controller
                     "desc"=>$request->post("gist_desc"),
                     "name"=>$request->post("gist_name"),
                     "date"=>$date];
-        GistService::instance()->addGist($data);
+        $this->gistservice->addGist($data);
         return redirect()->route("mygists");
     }
 
     public function actionDelgist($gistid){
-        GistService::instance()->delGist($gistid);
+        $this->gistservice->delGist($gistid);
         return redirect()->route("mygists");
     }
 }

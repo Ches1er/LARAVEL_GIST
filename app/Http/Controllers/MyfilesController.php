@@ -2,27 +2,54 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\FileService;
+use App\Contracts\FileService;
+use App\Contracts\MainService;
 use Illuminate\Http\Request;
+
 
 class MyfilesController extends Controller
 {
-    public function actionShowfile($fileid){
-        $user_roles = ["admin","user"];
-        $user = ["user_name"=>"Admin"];
-        $file = FileService::instance()->getFile($fileid);
-        return view('myfile',["user_roles"=>$user_roles,
-            "user"=>$user,"file"=>$file]);
+    protected $fileservice;
+    protected $mainservice;
+
+    /**
+     * MyfilesController constructor.
+     * @param FileService $fileservice
+     * @param MainService $mainService
+     */
+    public function __construct(FileService $fileservice,MainService $mainService)
+    {
+        $this->fileservice = $fileservice;
+        $this->mainservice = $mainService;
     }
+
+    /**
+     * @param $fileid
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function actionShowfile($fileid){
+        return view('myfile',["user_roles"=>$user_roles=$this->mainservice->getRoles(),
+            "file"=>$this->fileservice->getFile($fileid)]);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function actionAddfile(Request $request){
         $data = ["gist_id"=>$request->post("gist_id"),
                 "name"=>$request->post("file_name"),
                 "content"=>$request->post("file_content")];
-        FileService::instance()->addFile($data);
+        $this->fileservice->addFile($data);
         return redirect()->back();
     }
+
+    /**
+     * @param $fileid
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function actionDelfile($fileid){
-        FileService::instance()->delFile($fileid);
+        $this->fileservice->delFile($fileid);
         return redirect()->back();
     }
 }

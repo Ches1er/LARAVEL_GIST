@@ -2,27 +2,40 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\FileService;
-use App\Services\GistService;
-use App\Services\MainService;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Contracts\GistService;
+use App\Contracts\FileService;
+use App\Contracts\MainService;
 
 class GistController extends Controller
 {
 
+    protected $fileservice;
+    protected $gistservice;
+    protected $mainservice;
+
+    /**
+     * MyfilesController constructor.
+     * @param FileService $fileservice
+     * @param GistService $gistService
+     * @param MainService $mainService
+     */
+    public function __construct(FileService $fileservice,
+                                GistService $gistService,
+                                MainService $mainService)
+    {
+        $this->mainservice = $mainService;
+        $this->fileservice = $fileservice;
+        $this->gistservice = $gistService;
+    }
+
     public function actionShowgist($gistid){
-        $user_roles=MainService::instance()->getRoles();
-        $gist_content = GistService::instance()->getGist($gistid);
-        $files = GistService::instance()->getFiles($gistid);
         return view("gist",[
-            "user_roles"=>$user_roles,
-            "gist"=>$gist_content,
-            "files"=>$files]);
+            "user_roles"=>$this->mainservice->getRoles(),
+            "gist"=>$this->gistservice->getGist($gistid),
+            "files"=>$this->gistservice->getFiles($gistid)]);
     }
     public function actionShowfile($fileid){
-        $user_roles=MainService::instance()->getRoles();
-        $file = FileService::instance()->getFile($fileid);
-        return view("file",["file"=>$file,"user_roles"=>$user_roles]);
+        return view("file",["file"=>$this->fileservice->getFile($fileid),
+            "user_roles"=>$this->mainservice->getRoles()]);
     }
 }

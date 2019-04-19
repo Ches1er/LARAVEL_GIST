@@ -18,9 +18,7 @@ class ProfileController extends Controller
     }
 
     public function actionChangename(Request $request){
-        $user_id = Auth::user()->id;
-        $new_name = $request->post("name");
-        ProfileService::changeName($user_id,$new_name);
+        ProfileService::changeName(Auth::user()->id,$request->post("name"));
         return redirect()->back();
     }
 }

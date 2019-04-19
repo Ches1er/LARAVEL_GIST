@@ -2,43 +2,41 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Upic;
-use App\Services\AdminService;
-use App\Services\MainService;
-use App\User;
-use DemeterChain\Main;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Facades\AdminServiceFacade;
+use App\Contracts\AdminService;
+use App\Contracts\MainService;
 
 class MainController extends Controller
 {
+    protected $mainservice;
+
+    /**
+     * MainController constructor.
+     * @param $mainservice
+     */
+    public function __construct(MainService $mainservice)
+    {
+        $this->mainservice = $mainservice;
+    }
+
+
     public function actionIndex(Request $request,$caturl="all"){
-        $user_roles=MainService::instance()->getRoles();
-        $categories = MainService::instance()->getCategories();
-        $gists = MainService::instance()->getGists($caturl);
-        $files_count = MainService::instance()->getFilesCount();
-        return view("main",["user_roles"=>$user_roles,
-            "categories"=>$categories,
-            "gists"=>$gists,
-            "files_count"=>$files_count]
+        return view("main",["user_roles"=>$this->mainservice->getRoles(),
+            "categories"=>$this->mainservice->getCategories(),
+            "gists"=>$this->mainservice->getGists($caturl),
+            "files_count"=>$this->mainservice->getFilesCount()]
             );
     }
 
     public function actionProfile(){
-        $user_roles=MainService::instance()->getRoles();
-        $upic_id = User::select("upic_id")->where("id",Auth::user()->id)->first();
-        $upic_path = Upic::select("path")->where("id",$upic_id->upic_id)->first();
-        return view("profile",["upic_path"=>$upic_path,"user_roles"=>$user_roles]);
+        return view("profile",["user_roles"=>$this->mainservice->getRoles()]);
     }
 
-    public function actionAdmin(Request $request){
+    public function actionAdmin(Request $request,AdminService $adminService){
         is_null($request->get("name"))?$found_user=null:
-            $found_user=AdminServiceFacade::FindUser($request->get("name"));
-        $user_roles=MainService::instance()->getRoles();
-        $categories = MainService::instance()->getCategories();
-        return view("admin",["user_roles"=>$user_roles,
-            "categories"=>$categories,
+            $found_user=$adminService->FindUser($request->get("name"));
+        return view("admin",["user_roles"=>$this->mainservice->getRoles(),
+            "categories"=>$this->mainservice->getCategories(),
             "found_user"=>$found_user]
         );
     }
