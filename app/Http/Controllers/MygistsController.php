@@ -50,8 +50,6 @@ class MygistsController extends Controller
     }
 
     public function actionAddgist(Request $request){
-        $date = time();
-
         if (is_null($request->post("category_name_new"))){
             $category_id = $request->post("category_name");
         }
@@ -63,7 +61,7 @@ class MygistsController extends Controller
                 "category_id"=>$category_id,
                 "gist_desc"=>$request->post("gist_desc"),
                 "gist_name"=>$request->post("gist_name"),
-                "date"=>$date];
+                "date"=>time()];
         return $this->gistservice->addGist($data);
     }
 
