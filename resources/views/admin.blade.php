@@ -40,7 +40,10 @@
                 <form action="/addnewcat" method="post">
                     @csrf
                     <label for="name">Add category</label>
-                    <input type="text" name="name">
+                    <input type="text" name="name" value="{{old('name')}}">
+                    @if($errors->has('name'))
+                        <span class="validation_error">{{$errors->first('name')}}</span>
+                    @endif
                     <input type="submit" value="Add">
                 </form>
                 <hr />
@@ -52,8 +55,14 @@
                     @csrf
                     <label for="cat_name">Category name</label>
                     <input type="text" name="cat_name">
+                    @if($errors->has('cat_name'))
+                        <span class="validation_error">{{$errors->first('cat_name')}}</span>
+                    @endif
                     <label for="cat_name">New category name</label>
                     <input type="text" name="new_cat_name">
+                    @if($errors->has('new_cat_name'))
+                        <span class="validation_error">{{$errors->first('new_cat_name')}}</span>
+                    @endif
                     <input type="submit" value="Change">
                 </form>
                 <hr />
@@ -65,10 +74,13 @@
 
             <div class="admin_block">
                 <h3>Find user</h3>
-                <form action="/admin" method="get">
+                <form action="/admin/find" method="get">
                     @csrf
-                    <label for="name">Find user</label>
-                    <input type="text" name="name">
+                    <label for="name">User name:</label>
+                    <input type="text" name="user_name" value=" ">
+                    @if(session('find_user_error'))
+                        <span class="validation_error">{{session('find_user_error')}}</span>
+                    @endif
                     <input type="submit" value="Find">
                 </form>
                 <hr />

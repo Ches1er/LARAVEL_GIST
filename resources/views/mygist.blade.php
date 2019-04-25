@@ -22,27 +22,37 @@
             <a class="back" href="{{route('mygists')}}">Back to Mygists</a>
             <div class="gist_name">{{$gist->name}}</div>
             <hr />
-            <ul>
+            <table class="my_files_table">
+                <?php $caption=count($files)>0?"Gist contents next files:":"Gist doesnt have any files yet:"?>
+                <caption>{{$caption}}</caption>
                 @forelse($files as $file)
-                    <p class="files">Gist contents next files:</p>
-                    <li><a class="gist_file" href="files/showfile/{{$file->id}}">{{$file->name}}</a>
-                    <form action="files/delfile/{{$file->id}}" method="post">
-                        @method("delete")
-                        @csrf
-                        <input type="submit" value="Delete file">
-                    </form>
-                    </li>
+                <tr>
+                    <td><a class="gist_file" href="files/showfile/{{$file->id}}">{{$file->name}}</a></td>
+                    <td>
+                        <form action="files/delfile/{{$file->id}}" method="post">
+                            @method("delete")
+                            @csrf
+                            <input type="submit" value="Delete file">
+                        </form>
+                    </td>
+                </tr>
                 @empty
-                    <p class="files">Gist doesnt have any files yet:</p>
+
                 @endforelse
-            </ul>
+            </table>
             <div class="add_new">
                 <h3>Add new file</h3>
                 <form action="files/addfile" method="post">
                     @csrf
                     <input type="hidden" name="gist_id" value="{{$gist->id}}">
-                    Add file name:<input type="text" name="file_name" placeholder="File name...">
+                    Add file name:<input type="text" name="file_name" placeholder="File name..." value="{{old('name')}}">
+                    @if($errors->has('file_name'))
+                        <span class="validation_error">{{$errors->first('file_name')}}</span>
+                    @endif
                     Add file content:<textarea name="file_content"></textarea>
+                    @if($errors->has('file_content'))
+                        <span class="validation_error">{{$errors->first('file_content')}}</span>
+                    @endif
                     <input type="submit" value="Add">
                 </form>
             </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Contracts\FileService;
 use App\Contracts\MainService;
+use App\Http\Requests\FileValidation;
 use Illuminate\Http\Request;
 
 
@@ -36,7 +37,7 @@ class MyfilesController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function actionAddfile(Request $request){
+    public function actionAddfile(FileValidation $request){
         $data = ["gist_id"=>$request->post("gist_id"),
                 "name"=>$request->post("file_name"),
                 "content"=>$request->post("file_content")];

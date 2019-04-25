@@ -26,14 +26,14 @@
             <hr />
             <div class="gist_desc">Gist Description: {!! $gist->desc !!}</div>
             <hr />
-            <table>
+            <table class="files_table">
+                <?php $caption=count($files)>0?"Gist contents next files:":"Gist doesnt have any files yet:"?>
+                <caption>{{$caption}}</caption>
                 @forelse($files as $file)
-                    <caption>Gist contents next files:</caption>
                     <tr>
                         <td><a class="gist_file" href="/showfile/{{$file->id}}">{{$file->name}}</a></td>
                     </tr>
                 @empty
-                    <caption>Gist doesnt have any files yet:</caption>
                 @endforelse
             </table>
         </div>

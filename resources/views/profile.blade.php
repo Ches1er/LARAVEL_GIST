@@ -40,10 +40,14 @@
 
         <div class="change_name">
             <h3>Change login</h3>
+
             <form action="/changename" method="post">
                 @csrf
                 @method("put")
-                <input type="text" name="name">
+                <input type="text" name="name" value="{{old('name')}}">
+                @if($errors->has('name'))
+                    <span class="validation_error">{{$errors->first('name')}}</span>
+                @endif
                 <input type="submit" value="Change name">
             </form>
         </div>

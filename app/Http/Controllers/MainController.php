@@ -33,20 +33,40 @@ class MainController extends Controller
         return view("profile",["user_roles"=>$this->mainservice->getRoles()]);
     }
 
-    public function actionAdmin(Request $request,AdminService $adminService){
-        is_null($request->get("name"))?$found_user=null:
-            $found_user=$adminService->FindUser($request->get("name"));
+    /**
+     * @param Request $request
+     * @param AdminService $adminService
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function actionAdmin(Request $request){
+        $request->session()->forget('find_user_error');
         return view("admin",["user_roles"=>$this->mainservice->getRoles(),
             "categories"=>$this->mainservice->getCategories(),
-            "found_user"=>$found_user]
+            "found_user"=>null]
         );
     }
+
+    public function actionAdminFindUser(Request $request, AdminService $adminService){
+        $found_user=null;
+
+        if (is_null($request->get("user_name"))){
+            session(['find_user_error'=>'User name cant`be empty']);
+        }
+        else {
+            $found_user=$adminService->FindUser($request->get("user_name"));
+            $request->session()->forget('find_user_error');
+        }
+        return view("admin",["user_roles"=>$this->mainservice->getRoles(),
+                "categories"=>$this->mainservice->getCategories(),
+                "found_user"=>$found_user]
+        );
+    }
+
     public function actionLogout(Request $request)
     {
         Auth::guard()->logout();
-
         $request->session()->invalidate();
-
         return redirect('/');
     }
 }

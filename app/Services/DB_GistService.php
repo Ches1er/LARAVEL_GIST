@@ -25,6 +25,11 @@ class DB_GistService implements GistService
         $validator=Validator::make($data,[
             'gist_desc'=>'required|min:3',
             'gist_name'=>'required|min:3',
+        ],[
+            'gist_desc.required' => 'Gist description is required',
+            'gist_name.required' => 'Gist name is required',
+            'gist_desc.min' => 'Gist description has to contain at least 3 symbols',
+            'gist_name.min' => 'Gist name has to contain at least 3 symbols',
         ]);
         if ($validator->fails()){
             return redirect()->route('mygists')
