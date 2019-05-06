@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', "MainController@actionIndex")->name("main");
+
 Route::get('/showcat/{caturl}', "MainController@actionIndex")->name("main_categories");
 
     //Admin
@@ -58,15 +59,18 @@ Route::prefix('mygists')->middleware(['auth','isValidUser'])->group(function (){
 });
 
 //Profile
+
 Route::get('/profile', "MainController@actionProfile")->middleware(['auth','isValidUser'])->name("profile");
 Route::post('/addpic',"ProfileController@actionAddpic")->middleware(['auth','isValidUser'])->name("addpic");
 Route::put('/changename',"ProfileController@actionChangename")->middleware(['auth','isValidUser'])->name("changename");
+Route::get('/verification_mail_repeat','ProfileController@actionRepeatVerificationMail')->middleware('auth')->name('verification_mail_repeat');
 
 /*vendor/laravel/framework/src/illuminate/routing/router.php
 1149 string */
 
 Auth::routes();
 Route::get('finalregister/{token}','Auth\FinalRegister@actionFinalRegister')->name('finalregister');
+
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/_logout','MainController@actionLogout')->name('_logout');

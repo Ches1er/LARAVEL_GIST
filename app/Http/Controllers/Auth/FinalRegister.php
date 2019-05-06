@@ -25,7 +25,7 @@ class FinalRegister
                 DB::table('user_roles')->insert(['user_id'=>$id->id,'role_id'=>2]);
             }
         });
-        return redirect()->route('main');
+        return view('auth.verification_finished');
     }
 
 }

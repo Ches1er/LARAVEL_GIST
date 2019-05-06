@@ -24,7 +24,7 @@ class MainController extends Controller
     public function actionIndex(Request $request,$caturl="all"){
         return view("main",["user_roles"=>$this->mainservice->getRoles(),
             "categories"=>$this->mainservice->getCategories(),
-            "gists"=>$this->mainservice->getGists($caturl),
+            "gists"=>$this->mainservice->getGists($caturl,$request),
             "files_count"=>$this->mainservice->getFilesCount()]
             );
     }

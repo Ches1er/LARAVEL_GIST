@@ -22,11 +22,21 @@
     <nav>@yield("menu")</nav>
     <h3>{{Auth::user()->name}}'s Profile</h3>
     <div class="main_profile_content">
+
+        <!--Verify email-->
+
         @if(Auth::user()->email_verified_at===null)
             <div class="page_error_text">Your email doesnt verified. You cant publish gists.</div>
+            <form action="{{route('verification_mail_repeat')}}" method="get">
+                @csrf
+                <input type="submit" value="Send me verification email again">
+            </form>
         @endif
+
+
         <div class="upic"><img class="large_avatar" src="{{Auth::user()->getPic()->path }}" alt=""></div>
         <div class="changepic">
+
             <h3>Change user picture</h3>
             <form enctype="multipart/form-data" action="/addpic" method="POST">
                 @csrf

@@ -31,18 +31,18 @@ class EmailConfirmation extends Mailable
     public function build()
     {
 
-        /*  //Markdown
+          //Markdown
        return $this->markdown('emails.email_confirmation')->
         with([
             "name" => $this->data['name'],
             "url" => "http://mydomain/finalregister/".$this->data['remember_token']
-        ]);*/
+        ]);
 
             //Plain_text
-        return $this->text('emails.email_confirmation_plain')->
+/*        return $this->text('emails.email_confirmation_plain')->
         with([
             "name" => $this->data['name'],
             "url" => "http://mydomain/finalregister/".$this->data['remember_token']
-        ]);
+        ]);*/
     }
 }

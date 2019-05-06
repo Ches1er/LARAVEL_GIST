@@ -12,7 +12,7 @@ namespace App\Contracts;
 interface MainService
 {
     public function getFilesCount();
-    public function getGists($category_url);
+    public function getGists($category_url,$request);
     public function getUserGists($category_url,$user_id);
     public function getCategories();
     public function getRoles();

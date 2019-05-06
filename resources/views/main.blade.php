@@ -37,12 +37,22 @@
 
         <div class="main_content">
             <div class="about_resource">Instantly share code, notes, and snippets.</div>
+            <div class="filter">
+                <form action="" method="get">
+                <input type="text" name="author" placeholder="Author name..." value="{{session('old_author')}}">
+                <label for="author">or</label>
+                <input type="text" name="gist" placeholder="Gist name..." value="{{session('old_gist')}}">
+                <input type="submit" value="Find">
+                </form>
+            </div>
             <div class="gists">
             @forelse($gists as $gist)
                 <div class="full_info_container">
                     <div class="gist_container">
                         <a class="gist_name" href="{{route("showgist",["gistid"=>$gist->id])}}">{{$gist->name}}</a>
-                        <div class="gist_author">Author:{{$gist->getUser()->name}}</div>
+                        <div class="gist_author">Author:
+                            <a href="/?author={{$gist->getUser()->name}}">{{$gist->getUser()->name}}</a>
+                        </div>
                         <div class="gist_date"><?=date('d-m-y h:m:s',$gist->date)?></div>
                         <div class="gist_desc">{!!$gist->desc!!}</div>
                         @forelse($files_count as $file_count)

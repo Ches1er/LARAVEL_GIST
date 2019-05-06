@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Mail\EmailConfirmation;
+use App\Mail\MailConfigs;
 use App\User;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
@@ -70,8 +70,7 @@ class RegisterController extends Controller
         $token = md5($data['name']);
         $user_data = ['name' => $data['name'],'remember_token'=>$token];
 
-        config(['mail.username' => 'myblogtestemail@gmail.com']);
-        config(['mail.password' => 'testemail']);
+        MailConfigs::instance()->verificationEmail();
 
         $user=User::create([
             'name' => $data['name'],
@@ -82,5 +81,7 @@ class RegisterController extends Controller
         Mail::to($data['email'])->send(new EmailConfirmation($user_data));
         return $user;
     }
+
+
 
 }
