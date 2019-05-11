@@ -51,6 +51,9 @@ class Handler extends ExceptionHandler
                 return response()->view('errors.' . '404', [], 404);
             }
         }
+        if ($exception instanceof \App\Exceptions\UserNotFoundException){
+            return $exception->render($request);
+        }
 
         return parent::render($request, $exception);
     }

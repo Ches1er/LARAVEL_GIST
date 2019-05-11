@@ -46,6 +46,12 @@
                 </form>
             </div>
             <div class="gists">
+                @if(is_null($gists))
+                    <div class="page_error_text">
+                        {{session('error')}}
+                    </div>
+
+                @else
             @forelse($gists as $gist)
                 <div class="full_info_container">
                     <div class="gist_container">
@@ -71,8 +77,11 @@
                         </div>
                     </div>
             @endforelse
+                    @endif
             </div>
+            @if(!is_null($gists))
             {{$gists->links()}}
+                @endif
         </div>
     </section>
 @endsection

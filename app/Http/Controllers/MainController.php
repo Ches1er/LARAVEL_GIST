@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\UserNotFoundException;
 use Illuminate\Http\Request;
 use App\Contracts\AdminService;
 use App\Contracts\MainService;
@@ -68,6 +69,9 @@ class MainController extends Controller
         Auth::guard()->logout();
         $request->session()->invalidate();
         return redirect('/');
+    }
+    public function actionTest(Request $request){
+        throw new UserNotFoundException('User '.$request->get('user')." not found");
     }
 }
 

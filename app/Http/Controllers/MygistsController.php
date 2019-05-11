@@ -59,8 +59,8 @@ class MygistsController extends Controller
         }
             $data = ["user_id"=>Auth::id(),
                 "category_id"=>$category_id,
-                "gist_desc"=>$request->post("gist_desc"),
-                "gist_name"=>$request->post("gist_name"),
+                "desc"=>$request->post("gist_desc"),
+                "name"=>$request->post("gist_name"),
                 "date"=>time()];
         return $this->gistservice->addGist($data);
     }

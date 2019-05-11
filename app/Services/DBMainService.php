@@ -9,8 +9,10 @@
 namespace App\Services;
 
 use App\Contracts\MainService;
+use App\Exceptions\UserNotFoundException;
 use App\Models\Gist;
 use App\User;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -25,12 +27,22 @@ class DBMainService implements MainService
 
     private function getFilteredGists($request){
         $gists = Gist::select();
-
         if(!is_null($request->get('author'))){
-            $author_id = User::select(['id'])->where('name','like',$request->get('author')."%")->first();
-            $gists = $gists->where('user_id',$author_id->id);
+            /* Check if DB has record with author name
+             * if not return null as result
+             * if does, use $author_id
+             */
+            $author = User::select(['id'])->where('name','like','%'.$request->get('author').'%')->get();
+            if (count($author)===0){
+                $request->session()->put('error','Sorry, but users, which names consist of "'.$request->get('author').'" not found');
+                return null;
+            }
+        }
+        if (isset($author)){
+            $gists = $gists->whereIn('user_id',$author->toArray());
             $request->session()->put('old_author',$request->get('author'));
         }
+
         if(!is_null($request->get('gist'))){
             $gists = $gists->where('name','like',"%".
                 $request->get('gist')."%");
@@ -46,13 +58,18 @@ class DBMainService implements MainService
     }
 
     public function getGists($category_url,$request){
-        $gists = $this->getFilteredGists($request);
+        $this->getFilteredGists($request)===null?$gists=null:$gists = $this->getFilteredGists($request);
+        if ($gists===null)return null;
 
+        /* If url doesnt have cat_url, or 'all'
+         * return all gists
+         * or find gist id, and return gists which filtered by category
+         */
         if ($category_url===null||$category_url==="all"){
             return $gists->orderby('date','desc')->paginate(5);
         }
-        $cat_id = DB::table('categories')->select(['id'])->where('name',$category_url)->first();
-        return $gists->where('category_id',$cat_id->id)->
+        $category = DB::table('categories')->select(['id'])->where('name',$category_url)->first();
+        return $gists->where('category_id',$category->id)->
         orderby('date','desc')->paginate(5);
     }
 

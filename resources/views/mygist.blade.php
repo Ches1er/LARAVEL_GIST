@@ -42,7 +42,7 @@
             </table>
             <div class="add_new">
                 <h3>Add new file</h3>
-                <form action="files/addfile" method="post">
+                <form action="{{route('addfile')}}" method="post">
                     @csrf
                     <input type="hidden" name="gist_id" value="{{$gist->id}}">
                     Add file name:<input type="text" name="file_name" placeholder="File name..." value="{{old('name')}}">

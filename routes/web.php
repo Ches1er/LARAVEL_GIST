@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', "MainController@actionIndex")->name("main");
+Route::get('/test', "MainController@actionTest")->name("test");
 
 Route::get('/showcat/{caturl}', "MainController@actionIndex")->name("main_categories");
 
@@ -45,7 +46,7 @@ Route::get("/showfile/{fileid}","GistController@actionShowfile")->name("showfile
 Route::prefix('mygists')->middleware(['auth','isValidUser'])->group(function (){
     Route::get('', "MygistsController@actionMygists")->name("mygists");
     Route::get('/showcat/{caturl}', "MygistsController@actionMygists")->name("mygists_categories");
-    Route::get('/{gistid}', "MygistsController@actionShowgist")->name("showmygist");
+    Route::get('/showgist/{gistid}', "MygistsController@actionShowgist")->name("showmygist");
     Route::post('addgist', "MygistsController@actionAddgist")->name("addgist");
     Route::delete('delgist/{gistid}', "MygistsController@actionDelgist")->name("delgist");
 

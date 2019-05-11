@@ -48,12 +48,12 @@
                 </select>
                 Or create new:<input type="text" name="category_name_new" placeholder="New category name..." value="{{old('category_name_new')}}">
                 Add gist name:<input type="text" name="gist_name" placeholder="Gist name..." value="{{old('gist_name')}}">
-                @if($errors->has('gist_name'))
-                    <span class="validation_error">{{$errors->first('gist_name')}}</span>
+                @if($errors->has('name'))
+                    <span class="validation_error">{{$errors->first('name')}}</span>
                     @endif
                 Add gist description:<textarea name="gist_desc"></textarea>
-                @if($errors->has('gist_desc'))
-                    <span class="validation_error">{{$errors->first('gist_desc')}}</span>
+                @if($errors->has('desc'))
+                    <span class="validation_error">{{$errors->first('desc')}}</span>
 
                 @endif
                 <input type="submit" value="Add">

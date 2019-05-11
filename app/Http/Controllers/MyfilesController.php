@@ -34,10 +34,13 @@ class MyfilesController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param FileValidation $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function actionAddfile(FileValidation $request){
+
+        //Validation provides by Form Validation (FileValidation)!!!
+
         $data = ["gist_id"=>$request->post("gist_id"),
                 "name"=>$request->post("file_name"),
                 "content"=>$request->post("file_content")];

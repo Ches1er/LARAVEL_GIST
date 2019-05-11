@@ -23,13 +23,13 @@ class DB_GistService implements GistService
     }
     public function addGist(array $data){
         $validator=Validator::make($data,[
-            'gist_desc'=>'required|min:3',
-            'gist_name'=>'required|min:3',
+            'desc'=>'required|min:3',
+            'name'=>'required|min:3',
         ],[
-            'gist_desc.required' => 'Gist description is required',
-            'gist_name.required' => 'Gist name is required',
-            'gist_desc.min' => 'Gist description has to contain at least 3 symbols',
-            'gist_name.min' => 'Gist name has to contain at least 3 symbols',
+            'desc.required' => 'Gist description is required',
+            'name.required' => 'Gist name is required',
+            'desc.min' => 'Gist description has to contain at least 3 symbols',
+            'name.min' => 'Gist name has to contain at least 3 symbols',
         ]);
         if ($validator->fails()){
             return redirect()->route('mygists')
