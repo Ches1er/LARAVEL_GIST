@@ -46,16 +46,16 @@ Route::get("/showfile/{fileid}","GistController@actionShowfile")->name("showfile
 Route::prefix('mygists')->middleware(['auth','isValidUser'])->group(function (){
     Route::get('', "MygistsController@actionMygists")->name("mygists");
     Route::get('/showcat/{caturl}', "MygistsController@actionMygists")->name("mygists_categories");
-    Route::get('/showgist/{gistid}', "MygistsController@actionShowgist")->name("showmygist");
+    Route::get('/showgist/{gistid}', "MygistsController@actionShowgist")->middleware(['isUserGist'])->name("showmygist");
     Route::post('addgist', "MygistsController@actionAddgist")->name("addgist");
-    Route::delete('delgist/{gistid}', "MygistsController@actionDelgist")->name("delgist");
+    Route::delete('delgist/{gistid}', "MygistsController@actionDelgist")->middleware(['isUserGist'])->name("delgist");
 
     //Files
     Route::prefix('files')->group(function (){
-        Route::get('showfile/{fileid}',"MyfilesController@actionShowfile")->name("showfile");
+        Route::get('showfile/{fileid}',"MyfilesController@actionShowfile")->middleware(['isUserFile'])->name("showfile");
         Route::post('addfile',"MyfilesController@actionAddfile")->name("addfile");
-        Route::delete('delfile/{fileid}',"MyfilesController@actionDelfile")->name("delfile");
-        Route::get('showfile/editfile/{fileid}',"MyfilesController@actionEditfile")->name("editfile");
+        Route::delete('delfile/{fileid}',"MyfilesController@actionDelfile")->middleware(['isUserFile'])->name("delfile");
+        Route::get('showfile/editfile/{fileid}',"MyfilesController@actionEditfile")->middleware(['isUserFile'])->name("editfile");
     });
 });
 
@@ -76,9 +76,15 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/_logout','MainController@actionLogout')->name('_logout');
 
+//Invalid user actions
+
 Route::get('/invalid_user',function (){
     return view('errors.invalid_user');
 })->name('invalid_user');
+
+Route::get('/invalid_resource',function (){
+    return view('errors.invalid_resource');
+})->name('invalid_resource');
 
 
 

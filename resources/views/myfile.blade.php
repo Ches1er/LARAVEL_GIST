@@ -22,7 +22,7 @@
     <section>
         <div class="show_gist_container">
             <div class="buttons">
-                <a class="back" href="/mygists/{{$file->gist_id}}">Back to the gist</a>
+                <a class="back" href="{{route('showmygist',['gist_id'=>$file->gist_id])}}">Back to the gist</a>
             </div>
 
             <div class="gist_name">{{$file->name}}</div>

@@ -27,9 +27,9 @@
                 <caption>{{$caption}}</caption>
                 @forelse($files as $file)
                 <tr>
-                    <td><a class="gist_file" href="files/showfile/{{$file->id}}">{{$file->name}}</a></td>
+                    <td><a class="gist_file" href="{{route('showfile',['file_id'=>$file->id])}}">{{$file->name}}</a></td>
                     <td>
-                        <form action="files/delfile/{{$file->id}}" method="post">
+                        <form action="{{route('delfile',['file_id'=>$file->id])}}" method="post">
                             @method("delete")
                             @csrf
                             <input type="submit" value="Delete file">
@@ -45,13 +45,13 @@
                 <form action="{{route('addfile')}}" method="post">
                     @csrf
                     <input type="hidden" name="gist_id" value="{{$gist->id}}">
-                    Add file name:<input type="text" name="file_name" placeholder="File name..." value="{{old('name')}}">
-                    @if($errors->has('file_name'))
-                        <span class="validation_error">{{$errors->first('file_name')}}</span>
+                    Add file name:<input type="text" name="name" placeholder="File name..." value="{{old('name')}}">
+                    @if($errors->has('name'))
+                        <span class="validation_error">{{$errors->first('name')}}</span>
                     @endif
-                    Add file content:<textarea name="file_content"></textarea>
-                    @if($errors->has('file_content'))
-                        <span class="validation_error">{{$errors->first('file_content')}}</span>
+                    Add file content:<textarea name="content"></textarea>
+                    @if($errors->has('content'))
+                        <span class="validation_error">{{$errors->first('content')}}</span>
                     @endif
                     <input type="submit" value="Add">
                 </form>

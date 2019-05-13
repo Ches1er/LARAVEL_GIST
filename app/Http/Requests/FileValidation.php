@@ -24,18 +24,18 @@ class FileValidation extends FormRequest
     public function rules()
     {
         return [
-            'file_name'=>'required|min:2',
-            'file_content'=>'required|min:2'
+            'name'=>'required|min:2|unique:files',
+            'content'=>'required|min:2'
         ];
     }
 
     public function messages()
     {
         return [
-            'file_name.required'=>'Name field is required',
-            'file_name.min'=>'Name field has to contain at least 2 symbols',
-            'file_content.required'=>'File content is required',
-            'file_content.min'=>'Content has to contain at least 2 symbols',
+            'name.required'=>'Name field is required',
+            'name.min'=>'Name field has to contain at least 2 symbols',
+            'content.required'=>'File content is required',
+            'content.min'=>'Content has to contain at least 2 symbols',
         ];
     }
 }

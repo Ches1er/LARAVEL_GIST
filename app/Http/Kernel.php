@@ -3,6 +3,8 @@
 namespace App\Http;
 
 use App\Http\Middleware\InvalidUser;
+use App\Http\Middleware\isUserFile;
+use App\Http\Middleware\isUserGist;
 use App\Http\Middleware\IsValidUser;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -64,7 +66,9 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'isValidUser'=>IsValidUser::class
+        'isValidUser'=>IsValidUser::class,
+        'isUserGist'=>IsUserGist::class,
+        'isUserFile'=>IsUserFile::class
     ];
 
     /**

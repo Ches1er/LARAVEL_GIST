@@ -16,5 +16,6 @@ interface MainService
     public function getUserGists($category_url,$user_id);
     public function getCategories();
     public function getRoles();
+    public function getUserCategories();
 
 }

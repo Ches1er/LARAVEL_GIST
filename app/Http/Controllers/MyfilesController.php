@@ -42,8 +42,8 @@ class MyfilesController extends Controller
         //Validation provides by Form Validation (FileValidation)!!!
 
         $data = ["gist_id"=>$request->post("gist_id"),
-                "name"=>$request->post("file_name"),
-                "content"=>$request->post("file_content")];
+                "name"=>$request->post("name"),
+                "content"=>$request->post("content")];
         $this->fileservice->addFile($data);
         return redirect()->back();
     }

@@ -37,7 +37,7 @@ class MygistsController extends Controller
         return view("mygists",[
             "user_roles"=>$this->mainservice->getRoles(),
             "gists"=>$this->mainservice->getUserGists($caturl,Auth::id()),
-            "categories"=>$this->mainservice->getCategories(),
+            "categories"=>$this->mainservice->getUserCategories(),
             "files_count"=>$this->mainservice->getFilesCount()
         ]);
     }

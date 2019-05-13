@@ -3,13 +3,13 @@
     <section>
         <div class="page_error">
             <div class="page_error_text">
-                Sorry, but you`re not a valid user.
+                Sorry, but this is not your gist or file.
             </div>
             <div class="page_error_text">
-                You`re not able to create gists, or modify profile.
+                You only able to view another user gists or files.
             </div>
             <div class="page_error_text">
-                For changing your status please connect with us by email.
+                Nor modify their!
             </div>
             <div class="page_error_main">
                 <a href="{{route('main')}}">To Main page</a>
@@ -17,3 +17,4 @@
         </div>
     </section>
 @endsection
+

@@ -10,6 +10,7 @@ namespace App\Services;
 
 use App\Contracts\MainService;
 use App\Exceptions\UserNotFoundException;
+use App\Models\Category;
 use App\Models\Gist;
 use App\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -86,7 +87,13 @@ class DBMainService implements MainService
     }
 
     public function getCategories(){
-        $cat = DB::table('categories')->get();
+        $cat = Category::all();
+        if (!empty($cat))return $cat;
+        return [];
+    }
+    public function getUserCategories(){
+        $cat_ids = Gist::select(['category_id'])->where('user_id',Auth::id())->get();
+        $cat = Category::whereIn('id',$cat_ids->toArray())->get();
         if (!empty($cat))return $cat;
         return [];
     }
