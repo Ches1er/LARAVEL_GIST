@@ -12,7 +12,11 @@ class CategoriesTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table("categories")->insert([["name"=>"PHP"],
-            ["name"=>"JS"],["name"=>"Java"],["name"=>"Python"]]);
+        DB::table("categories")->insert([
+            ["name"=>"PHP"],
+            ["name"=>"JS"],
+            ["name"=>"Java"],
+            ["name"=>"Python"]
+        ]);
     }
 }

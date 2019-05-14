@@ -12,7 +12,9 @@ class UpicTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table("upic")->insert([["path"=>"img/user.png"],
-            ["path"=>"img/admin.png"]]);
+        DB::table("upic")->insert([
+            ["path"=>"img/user.png"],
+            ["path"=>"img/admin.png"]
+        ]);
     }
 }

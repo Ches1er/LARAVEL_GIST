@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Contracts\FileService;
 use App\Contracts\MainService;
 use App\Http\Requests\FileValidation;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Request;
 
 
 class MyfilesController extends Controller
@@ -32,7 +32,6 @@ class MyfilesController extends Controller
         return view('myfile',["user_roles"=>$user_roles=$this->mainservice->getRoles(),
             "file"=>$this->fileservice->getFile($fileid)]);
     }
-
     /**
      * @param FileValidation $request
      * @return \Illuminate\Http\RedirectResponse
@@ -49,6 +48,7 @@ class MyfilesController extends Controller
     }
 
     /**
+     * @param \Illuminate\Support\Facades\Request $request
      * @param $fileid
      * @return \Illuminate\Http\RedirectResponse
      */

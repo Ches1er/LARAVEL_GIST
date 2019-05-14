@@ -62,6 +62,14 @@ input[type="submit"]{
 input[type="text"],select{
     height: 23px;
 }
+.message{
+    color: #1a72ce;
+    background-color: white;
+    margin: 3px 0;
+    border: red 1px solid;
+    border-radius: 3px;
+    padding: 5px;
+}
 
 /*Menu*/
 nav{
@@ -199,7 +207,6 @@ aside a:hover {
 }
 .gist_container{
     width: 100%;
-    margin-top: 15px;
     padding: 5px;
     display: inline-flex;
     flex-flow: column nowrap;
@@ -257,6 +264,10 @@ aside a:hover {
     text-align: right;
     font-size: small;
     font-weight: bold;
+}
+.private_gist{
+    color: darkred;
+    font-size: small;
 }
 
     /*Add gist*/

@@ -2,24 +2,31 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\MainService;
+use App\User;
 use Illuminate\Http\Request;
 use App\Contracts\AdminService;
 use App\Contracts\CategoryService;
 use Illuminate\Validation\ValidationException;
 
+
 class AdminController extends Controller
 {
     protected $adminservice;
     protected $categoryservice;
+    protected $mainservice;
 
     /**
      * AdminController constructor.
+     * @param MainService $mainservice
      * @param AdminService $adminService
+     * @param CategoryService $categoryService
      */
-    public function __construct(AdminService $adminService,CategoryService $categoryService)
+    public function __construct(MainService $mainservice,AdminService $adminService,CategoryService $categoryService)
     {
         $this->adminservice = $adminService;
         $this->categoryservice =$categoryService;
+        $this->mainservice = $mainservice;
     }
 
 
@@ -38,14 +45,22 @@ class AdminController extends Controller
         return redirect()->route("admin");
     }
 
+    private function viewWithFoundUser(int $id){
+        $found_user = User::where('id',$id)->first();
+        return view("admin",["user_roles"=>$this->mainservice->getRoles(),
+                "categories"=>$this->mainservice->getCategories(),
+                "found_user"=>$found_user]
+        );
+    }
+
     public function actionBanUser(Request $request){
         $this->adminservice->BanUser($request->post("id"));
-        return redirect()->route("admin");
+        return $this->viewWithFoundUser($request->post("id"));
     }
 
     public function actionUnbanUser(Request $request){
         $this->adminservice->UnbanUser($request->post("id"));
-        return redirect()->route("admin");
+        return $this->viewWithFoundUser($request->post("id"));
     }
 
     public function actionVerifyUserEmail(Request $request){

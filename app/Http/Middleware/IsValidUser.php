@@ -18,7 +18,7 @@ class IsValidUser
         {
             $user_roles = Auth::user()->roles();
             $invalid = false;
-            if (in_array("Invalid",$user_roles))$invalid = true;
+            if (in_array(\Roles_constants::INVALID_USER,$user_roles))$invalid = true;
             if (Auth::user() &&  !$invalid) {
                 return $next($request);
             }

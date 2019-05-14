@@ -1,5 +1,4 @@
 @extends("layouts.default")
-
 @guest
     @include("layouts.menus.menu_guest")
     @else

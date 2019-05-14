@@ -9,17 +9,28 @@
 namespace App\Services;
 
 
+use App\Models\File;
+use App\Models\Gist;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Contracts\GistService;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Validator;
 
 class DB_GistService implements GistService
 {
     public function getGist($gist_id){
-        return DB::table("gists")->where("id",(int)$gist_id)->first();
+        $gist=Gist::where("id",(int)$gist_id)->first();
+        if ($gist->private==='public')return Gist::where("id",(int)$gist_id)->first();
+        if ($gist->private==='private' && $gist->user_id===Auth::id()){
+            return Gist::where("id",(int)$gist_id)->first();
+        }else {
+            return null;
+        }
     }
+
     public function getFiles($gist_id){
-        return DB::table("files")->where("gist_id",(int)$gist_id)->get();
+        return File::where("gist_id",(int)$gist_id)->get();
     }
     public function addGist(array $data){
         $validator=Validator::make($data,[
@@ -41,13 +52,16 @@ class DB_GistService implements GistService
                 DB::table('gists')->insert($data);
 
         });
+            (new Request())::session()->flash('message','Gist: "'.$data['name'].'" added.');
             return redirect()->route('mygists');
         }
 
     }
     public function delGist($gistid){
-        DB::transaction(function() use ($gistid){
-            DB::table('gists')->where("id",$gistid)->delete();
-        });
+        $gist = Gist::where('id',$gistid)->first();
+        $gist_name = $gist->name;
+        $gist->delete();
+        (new Request())::session()->flash('message','Gist: "'.$gist_name.'" successfully deleted.');
+        return redirect()->route('mygists');
     }
 }

@@ -11,4 +11,8 @@ class File extends Model
     protected $fillable = [
         'name', 'gist_id', 'content',
     ];
+
+    public function Gist(){
+        return $this->belongsTo(Gist::class,'gist_id','id')->first();
+    }
 }

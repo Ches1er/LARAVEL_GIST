@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Mail\EmailConfirmation;
 use App\Mail\MailConfigs;
+use App\Models\Upic;
 use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
@@ -66,17 +67,19 @@ class RegisterController extends Controller
      */
     protected function create(array $data):User
     {
-
         $token = md5($data['name']);
         $user_data = ['name' => $data['name'],'remember_token'=>$token];
 
         MailConfigs::instance()->verificationEmail();
 
+        $upic_default = Upic::where('path','img/user.png')->first();
+
         $user=User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'remember_token'=>$token
+            'remember_token'=>$token,
+            'upic_id'=>$upic_default->id
         ]);
         Mail::to($data['email'])->send(new EmailConfirmation($user_data));
         return $user;

@@ -18,7 +18,7 @@ class IsAdmin
     {
         $user_roles = Auth::user()->roles();
         $isAdmin = false;
-        if (in_array("Admin",$user_roles))$isAdmin = true;
+        if (in_array(\Roles_constants::ADMIN,$user_roles))$isAdmin = true;
         if (Auth::user() &&  $isAdmin) {
             return $next($request);
         }

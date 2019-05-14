@@ -21,6 +21,9 @@
         <div class="show_gist_container">
             <a class="back" href="{{route('mygists')}}">Back to Mygists</a>
             <div class="gist_name">{{$gist->name}}</div>
+            @if(session('message'))
+                <div class="message">{{session('message')}}</div>
+            @endif
             <hr />
             <table class="my_files_table">
                 <?php $caption=count($files)>0?"Gist contents next files:":"Gist doesnt have any files yet:"?>

@@ -21,13 +21,13 @@ class MainController extends Controller
         $this->mainservice = $mainservice;
     }
 
-
     public function actionIndex(Request $request,$caturl="all"){
-        return view("main",["user_roles"=>$this->mainservice->getRoles(),
+        return view("main",[
+            "user_roles"=>$this->mainservice->getRoles(),
             "categories"=>$this->mainservice->getCategories(),
             "gists"=>$this->mainservice->getGists($caturl,$request),
-            "files_count"=>$this->mainservice->getFilesCount()]
-            );
+            "files_count"=>$this->mainservice->getFilesCount()
+            ]);
     }
 
     public function actionProfile(){
@@ -36,9 +36,7 @@ class MainController extends Controller
 
     /**
      * @param Request $request
-     * @param AdminService $adminService
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     * @throws \Illuminate\Validation\ValidationException
      */
     public function actionAdmin(Request $request){
         $request->session()->forget('find_user_error');
@@ -70,9 +68,9 @@ class MainController extends Controller
         $request->session()->invalidate();
         return redirect('/');
     }
-    public function actionTest(Request $request){
+/*    public function actionTest(Request $request){
         throw new UserNotFoundException('User '.$request->get('user')." not found");
-    }
+    }*/
 }
 
 

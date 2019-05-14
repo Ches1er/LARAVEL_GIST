@@ -9,6 +9,8 @@
 namespace App\Contracts;
 
 
+use Illuminate\Http\Request;
+
 interface FileService
 {
     public function getFile($fileid);

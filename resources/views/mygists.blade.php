@@ -29,8 +29,8 @@
     <aside>
         <ul class="category_menu">
             <li><a href="{{route("mygists_categories",['caturl'=>"all"])}}">All</a></li>
-            @foreach($categories as $category)
-                <li><a href="{{route("mygists_categories",['caturl'=>$category->name])}}">{{$category->name}}</a></li>
+            @foreach($user_categories as $user_category)
+                <li><a href="{{route("mygists_categories",['caturl'=>$user_category->name])}}">{{$user_category->name}}</a></li>
             @endforeach
         </ul>
 
@@ -39,10 +39,13 @@
     <div class="main_content">
         <div class="add_new">
             <h3>Add new gist</h3>
+            @if(session('message'))
+                <div class="message">{{session('message')}}</div>
+            @endif
             <form action="{{route("addgist")}}" method="post">
                 @csrf
                 Pick category:<select name="category_name" id="">
-                    @foreach ($categories as $category)
+                    @foreach ($all_categories as $category)
                     <option value="{{$category->id}}">{{$category->name}}</option>
                     @endforeach
                 </select>
@@ -54,8 +57,8 @@
                 Add gist description:<textarea name="gist_desc"></textarea>
                 @if($errors->has('desc'))
                     <span class="validation_error">{{$errors->first('desc')}}</span>
-
                 @endif
+                Make private:<input type="checkbox" name="private">
                 <input type="submit" value="Add">
             </form>
         </div>
@@ -65,6 +68,7 @@
             <div class="full_info_container">
                 <div class="gist_container">
                     <a class="gist_name" href="{{route("showmygist",["gistid"=>$gist->id])}}">{{$gist->name}}</a>
+                    @if($gist->private==='private')<span class="private_gist">Private gist</span>@endif
                     <form action="mygists/delgist/{{$gist->id}}" method="post">
                         @method("delete")
                         @csrf
@@ -77,11 +81,13 @@
                     @empty
                     @endforelse
                 </div>
-                {{$gists->links()}}
+
             </div>
+
         @empty
             <p class="files">You dont have any gists yet:</p>
         @endforelse
+        {{$gists->links()}}
     </div>
     </section>
 @endsection

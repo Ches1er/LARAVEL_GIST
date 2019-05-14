@@ -29,11 +29,14 @@ class GistController extends Controller
     }
 
     public function actionShowgist($gistid){
+        $gist = $this->gistservice->getGist($gistid);
+        if(!$gist)return redirect()->route('private_resource');
         return view("gist",[
             "user_roles"=>$this->mainservice->getRoles(),
-            "gist"=>$this->gistservice->getGist($gistid),
+            "gist"=>$gist,
             "files"=>$this->gistservice->getFiles($gistid)]);
     }
+
     public function actionShowfile($fileid){
         return view("file",["file"=>$this->fileservice->getFile($fileid),
             "user_roles"=>$this->mainservice->getRoles()]);

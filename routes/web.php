@@ -86,6 +86,10 @@ Route::get('/invalid_resource',function (){
     return view('errors.invalid_resource');
 })->name('invalid_resource');
 
+Route::get('/private_resource',function (){
+    return view('errors.private_resource');
+})->name('private_resource');
+
 
 
 //Email browser test

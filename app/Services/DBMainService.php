@@ -9,11 +9,9 @@
 namespace App\Services;
 
 use App\Contracts\MainService;
-use App\Exceptions\UserNotFoundException;
 use App\Models\Category;
 use App\Models\Gist;
 use App\User;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -27,14 +25,17 @@ class DBMainService implements MainService
     }
 
     private function getFilteredGists($request){
-        $gists = Gist::select();
+        $gists = Gist::select()
+            ->where('private','public')
+            ->orWhere('user_id',Auth::id());
+
         if(!is_null($request->get('author'))){
             /* Check if DB has record with author name
              * if not return null as result
              * if does, use $author_id
              */
             $author = User::select(['id'])->where('name','like','%'.$request->get('author').'%')->get();
-            if (count($author)===0){
+            if (empty($author[0])){
                 $request->session()->put('error','Sorry, but users, which names consist of "'.$request->get('author').'" not found');
                 return null;
             }

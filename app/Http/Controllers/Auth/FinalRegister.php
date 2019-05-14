@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\Auth;
 
 
+use App\Models\Role;
 use Illuminate\Support\Facades\DB;
 
 class FinalRegister
@@ -22,7 +23,8 @@ class FinalRegister
                 ->update(['email_verified_at'=>$time]);
             if(is_null(DB::table('user_roles')->where('user_id',(int)$id->id)->first()))
             {
-                DB::table('user_roles')->insert(['user_id'=>$id->id,'role_id'=>2]);
+                $activ_user_role = Role::where('name',\Roles_constants::ACTIV_USER)->first();
+                DB::table('user_roles')->insert(['user_id'=>$id->id,'role_id'=>$activ_user_role->id]);
             }
         });
         return view('auth.verification_finished');

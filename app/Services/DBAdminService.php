@@ -8,8 +8,10 @@
 
 namespace App\Services;
 
+use App\Models\Category;
+use App\Models\Role;
+use App\Models\User_role;
 use App\User;
-use Illuminate\Support\Facades\DB;
 use App\Contracts\AdminService;
 
 class DBAdminService implements AdminService
@@ -20,22 +22,25 @@ class DBAdminService implements AdminService
     }
 
     public function BanUser($id){
-        DB::table('user_roles')->where('user_id',$id)->
-            update(['role_id'=>3]);
+        $invalid_user_role = Role::where('name',\Roles_constants::INVALID_USER)
+                                        ->first();
+        User_role::where('user_id',$id)
+                    ->update(['role_id'=>$invalid_user_role->id]);
     }
 
     public function UnbanUser($id){
-
-        DB::table('user_roles')->where('user_id',$id)->
-            update(['role_id'=>2]);
+        $invalid_user_role = Role::where('name',\Roles_constants::ACTIV_USER)
+            ->first();
+        User_role::where('user_id',$id)
+                    ->update(['role_id'=>$invalid_user_role->id]);
     }
 
     public function ChangeCategoryName($old_name,$new_name){
-        DB::table('categories')->where('name',$old_name)->
-            update(['name'=>$new_name]);
+        Category::where('name',$old_name)
+                    ->update(['name'=>$new_name]);
     }
     public function VerifyEmail($id){
-        DB::table('users')->where('id',$id)->
-        update(['email_verified_at'=>time()]);
+        User::where('id',$id)
+                ->update(['email_verified_at'=>time()]);
     }
 }

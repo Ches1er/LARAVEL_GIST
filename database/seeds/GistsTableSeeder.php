@@ -12,11 +12,22 @@ class GistsTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table("gists")->insert([["name"=>"PHP First project",
-            "date"=>"123456784","category_id"=>1,
-            "user_id"=>1,"desc"=>"My first PHP project"],
-            ["name"=>"JS First project",
-                "date"=>"123356784","category_id"=>2,
-                "user_id"=>2,"desc"=>"My first JS project"]]);
+        DB::table("gists")->insert([
+            [
+                "name"=>"PHP First project",
+                "date"=>"123456784","category_id"=>1,
+                "user_id"=>1,
+                "desc"=>"My first PHP project",
+                "private"=>"public"
+            ],
+            [
+                "name"=>"JS First project",
+                "date"=>"123356784",
+                "category_id"=>2,
+                "user_id"=>2,
+                "desc"=>"My first JS project",
+                "private"=>"public"
+            ]
+        ]);
     }
 }

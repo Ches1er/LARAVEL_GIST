@@ -24,7 +24,7 @@ class FileValidation extends FormRequest
     public function rules()
     {
         return [
-            'name'=>'required|min:2|unique:files',
+            'name'=>'required|min:2',
             'content'=>'required|min:2'
         ];
     }

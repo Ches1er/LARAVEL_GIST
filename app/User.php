@@ -6,7 +6,6 @@ use App\Models\Role;
 use App\Models\Upic;
 use App\Models\User_role;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Auth;
 
@@ -20,7 +19,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','remember_token'
+        'name', 'email', 'password','remember_token','upic_id'
     ];
 
     /**
@@ -63,7 +62,7 @@ class User extends Authenticatable
 
     public function hasBan(){
         $roles = $this->roles();
-        if (in_array("Invalid",$roles))return true;
+        if (in_array(\Roles_constants::INVALID_USER,$roles))return true;
         return false;
     }
 }
