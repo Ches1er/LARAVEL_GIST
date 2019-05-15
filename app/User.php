@@ -65,4 +65,5 @@ class User extends Authenticatable
         if (in_array(\Roles_constants::INVALID_USER,$roles))return true;
         return false;
     }
+
 }

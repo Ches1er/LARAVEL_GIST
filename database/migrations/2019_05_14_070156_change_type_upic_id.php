@@ -14,8 +14,7 @@ class ChangeTypeUpicId extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->bigInteger('upic_id')->change();
-
+            $table->bigInteger('upic_id')->unsigned()->change();
             $table->foreign('upic_id')->references('id')->on('upic');
         });
     }
