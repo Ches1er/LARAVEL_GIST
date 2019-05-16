@@ -25,9 +25,13 @@ class DBMainService implements MainService
     }
 
     private function getFilteredGists($request){
-        $gists = Gist::select()
-            ->where('private','public')
-            ->orWhere('user_id',Auth::id());
+        if(Auth::check()){
+        Auth::user()->name==='Admin'?
+            $gists = Gist::select():
+            $gists = Gist::select()->where('private','public');
+        } else {
+            $gists = Gist::select()->where('private','public');
+        }
 
         if(!is_null($request->get('author'))){
             /* Check if DB has record with author name

@@ -78,8 +78,8 @@
                     @csrf
                     <label for="name">User name:</label>
                     <input type="text" name="user_name" value=" ">
-                    @if(session('find_user_error'))
-                        <span class="validation_error">{{session('find_user_error')}}</span>
+                    @if($errors->has('user_name'))
+                        <span class="validation_error">{{$errors->first('user_name')}}</span>
                     @endif
                     <input type="submit" value="Find">
                 </form>

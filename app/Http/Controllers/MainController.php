@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\UserNotFoundException;
+
+use App\Http\Requests\AdminFindUser;
 use Illuminate\Http\Request;
 use App\Contracts\AdminService;
 use App\Contracts\MainService;
@@ -39,23 +40,14 @@ class MainController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function actionAdmin(Request $request){
-        $request->session()->forget('find_user_error');
         return view("admin",["user_roles"=>$this->mainservice->getRoles(),
             "categories"=>$this->mainservice->getCategories(),
             "found_user"=>null]
         );
     }
 
-    public function actionAdminFindUser(Request $request, AdminService $adminService){
-        $found_user=null;
-
-        if (is_null($request->get("user_name"))){
-            session(['find_user_error'=>'User name cant`be empty']);
-        }
-        else {
-            $found_user=$adminService->FindUser($request->get("user_name"));
-            $request->session()->forget('find_user_error');
-        }
+    public function actionAdminFindUser(AdminFindUser $request, AdminService $adminService){
+        $found_user=$adminService->FindUser($request->get("user_name"));
         return view("admin",["user_roles"=>$this->mainservice->getRoles(),
                 "categories"=>$this->mainservice->getCategories(),
                 "found_user"=>$found_user]
