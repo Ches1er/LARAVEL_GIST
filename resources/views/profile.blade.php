@@ -34,6 +34,13 @@
         @endif
 
 
+        <form action="{{route('get_token')}}" method="post">
+            @csrf
+            <input type="submit" value="Send me token">
+        </form>
+
+
+
         <div class="upic"><img class="large_avatar" src="{{Auth::user()->getPic()->path }}" alt=""></div>
         <div class="changepic">
 

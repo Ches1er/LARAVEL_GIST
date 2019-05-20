@@ -58,6 +58,7 @@ class MainController extends Controller
     {
         Auth::guard()->logout();
         $request->session()->invalidate();
+        setcookie("token", "", time() - 3600);
         return redirect('/');
     }
 /*    public function actionTest(Request $request){

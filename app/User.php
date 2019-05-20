@@ -66,4 +66,11 @@ class User extends Authenticatable
         return false;
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function tokens(){
+        return $this->hasMany(User_token::class,'user_id','id')->get();
+    }
+
 }

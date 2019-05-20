@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\Api_checkAdmin;
 use App\Http\Middleware\InvalidUser;
 use App\Http\Middleware\isUserFile;
 use App\Http\Middleware\isUserGist;
@@ -68,7 +69,9 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'isValidUser'=>IsValidUser::class,
         'isUserGist'=>IsUserGist::class,
-        'isUserFile'=>IsUserFile::class
+        'isUserFile'=>IsUserFile::class,
+
+        'Api_checkAdmin'=>Api_checkAdmin::class
     ];
 
     /**

@@ -1,0 +1,69 @@
+        Кастомная авторизация
+
+1. Настройки авторизации лежат в config/auth.php. Позволяет добавить свои
+гарды и провайдеры авторизации и настроить работу по умолчанию.
+2. Гарды из коробки лежать в laravel/framework/src/Illuminate/Auth
+и там SessionGuard и TokenGuard.
+Провайдеры лежат по тому же пути, по-умолчанию используется EloquentUserProvider
+3. Если мы создаем своего нового юзера, то он должен реализовать контракт
+Authenticatable и реализовать его методы.
+4. Создаем свой CustomUserProvider (имплементирует UserProvider) и
+CustomGuard(имеплементирует Guard).
+5. Реализуем необходимые методы в CustomUserProvider.
+6. RetirieveByToken метод позволяет сделать реализацию авторизации для API,
+используя токен и идентификатор пользователя.
+7. RetrieveByCredentials. Получая $credentials, ищем юзера по
+$credentials['name'] и если находим - возвращаем.
+8. VaildateCredentials - полченного через метод RetrieveByCredentials юзера
+проверяем на соответствие паролю, hash($credentials['password']) должен
+быть соотв равен $user->getAuthPassword.
+9. Далее заполним наш класс CustomGuard.
+В свойства добавим $provider (в аннотации можно указать, что это
+@var UserProvider, тогда нам будут подбрасываться методы) и $user, в который
+мы будем записывать пользователя.
+В методе конструктор будем принимать наш UserProvider и записывать его в $provider.
+Метод check проверяет авторизован пользователь или нет. Будем проверять
+по переданному токену. Передавать его мы будем через пост-параметр.
+$token = $_Post('sid');
+Далее в свойство $user мы будем записывать результат от $this->provider->retrieveByToken('',$token)
+и возвращать будет, пустой $user или нет (true-false).
+Метод guest будет возвращать нам !$this->check();
+Метод user возвращает текущего пользователя. if ($this->check()) return $this-user;
+Метод id возвращает текущего пользователя. if ($this->check()) return $this-user->getAudentifier;
+Метод validate, $user = $this->provider->retrieveByCredentials($credentials);
+return $this->provider->vlidateCredentials($user,$credentials);
+Метод юзер, устанавливает текущего юзера, $this->user = $user;
+
+Фасад Auth который используется по умолчанию в Ларавел, работает следующим образом,
+берется текущий гуард, и вызываются его методы.
+
+    Регистрация кастомной авторизации.
+
+Пишем провайдер, который будет собирать все наши гарды и провайдеры вместе.
+В папке Providers в классе AuthServiceProvider в методе бут пишем:
+Auth::provider(имя как будет называться наш провайдер, например custom ,function($app){
+    return new CustomUserProvider();
+});
+Auth::extend(имя нашего драйвера(например 'token'), function($app,$name,$config){
+    return new CustomGuard(Auth::createUserProvider($config['provider']));
+})
+
+Далее идем в auth.php и делаем там необходимые настройки:
+в массив guard добавляем новый элемент
+myauth=>[
+    'driver'=>'тот драйвер который вы указали в AuthServiceProvider, т.е. token',
+    'provider'=>'custom (оно определяется ниже в массиве providers)'
+];
+в массив providers добавляем новый элемент:
+'custom'=>[
+    'driver'=>'custom',
+    'model'=>если она у нас есть, например App\User::class
+]
+
+Далее идем в роуты, заходим в api.php и в новом роуте миддлвейре после auth, ставим название
+нашего гарда, он у нас называется "myauth" и укажем метод передачи параметров - Post.
+Сделаем какое-то действие, например выведем в Closure 'hello world'.
+Без параметра 'sid', middleware auth нас будет сразу перебрасывать на роут login
+
+
+

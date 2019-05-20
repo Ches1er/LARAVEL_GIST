@@ -1,18 +1,24 @@
 <?php
 
+namespace App\Auth;
+
+use Illuminate\Foundation\Auth\User;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User_token;
+
 
 class CustomUserProvider implements \Illuminate\Contracts\Auth\UserProvider
 {
 
-    private $user;
+    private $users;
 
     /**
      * CustomUserProvider constructor.
-     * @param $user
-     */
-    public function __construct(\App\User $user)
+* @param $user
+*/
+    public function __construct()
     {
-        $this->user = $user;
+        $this->users=User::select();
     }
 
 
@@ -24,7 +30,9 @@ class CustomUserProvider implements \Illuminate\Contracts\Auth\UserProvider
      */
     public function retrieveById($identifier)
     {
-        // TODO: Implement retrieveById() method.
+        $user = $this->user->where('name',$identifier)->first();
+        if (empty($user))return null;
+        return $user;
     }
 
     /**
@@ -32,11 +40,18 @@ class CustomUserProvider implements \Illuminate\Contracts\Auth\UserProvider
      *
      * @param mixed $identifier
      * @param string $token
+     * @param \App\User $user
      * @return \Illuminate\Contracts\Auth\Authenticatable|null
      */
     public function retrieveByToken($identifier, $token)
     {
-        // TODO: Implement retrieveByToken() method.
+        $userFromTokens = User_token::where('token',$token)->first();
+
+        if (!is_null($userFromTokens)){
+            $user = $this->users->where('id',$userFromTokens->user_id)->first();
+            return $user;
+        }
+        return null;
     }
 
     /**
@@ -59,8 +74,11 @@ class CustomUserProvider implements \Illuminate\Contracts\Auth\UserProvider
      */
     public function retrieveByCredentials(array $credentials)
     {
-        // TODO: Implement retrieveByCredentials() method.
+        $user = $this->retrieveById($credentials['user_name']);
+        if ($user) return $user;
+        return null;
     }
+
 
     /**
      * Validate a user against the given credentials.
@@ -71,6 +89,14 @@ class CustomUserProvider implements \Illuminate\Contracts\Auth\UserProvider
      */
     public function validateCredentials(\Illuminate\Contracts\Auth\Authenticatable $user, array $credentials)
     {
-        // TODO: Implement validateCredentials() method.
+        $user = $this->retrieveByCredentials($credentials);
+        if ($user){
+            if($user->getAuthPassword()==Hash::make($credentials['password']))return true;
+            return false;
+        }
+        return false;
     }
 }
+
+//eyJpdiI6InJKUEtXejh3aGVcL0lGVXdoSE1kOWdnPT0iLCJ2YWx1ZSI6IklzNjNQVlwvZFFFRmswN3pwSHlrZll0dklkVWNvdU5IYW93MTRaUHAzc29CMWtTZ0lZQk5lQmVcLzk2UVZDYWlGZCIsIm1hYyI6Ijk2YWE3NDQ0MDgxY2VlM2U4ZGM0YmZmZjUxZjRhNGU5ZTBiNGI1NmM4OTM2MzBlODYxY2U0NmI5ZmMxY2I3OTEifQ
+//eyJpdiI6InJKUEtXejh3aGVcL0lGVXdoSE1kOWdnPT0iLCJ2YWx1ZSI6IklzNjNQVlwvZFFFRmswN3pwSHlrZll0dklkVWNvdU5IYW93MTRaUHAzc29CMWtTZ0lZQk5lQmVcLzk2UVZDYWlGZCIsIm1hYyI6Ijk2YWE3NDQ0MDgxY2VlM2U4ZGM0YmZmZjUxZjRhNGU5ZTBiNGI1NmM4OTM2MzBlODYxY2U0NmI5ZmMxY2I3OTEifQ%3D%3D

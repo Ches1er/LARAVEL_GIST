@@ -46,6 +46,10 @@ return [
             'provider' => 'users',
             'hash' => false,
         ],
+        'myauth'=>[
+            'driver'=>'token',
+            'provider'=>'custom'
+        ]
     ],
 
     /*
@@ -70,6 +74,10 @@ return [
             'driver' => 'eloquent',
             'model' => App\User::class,
         ],
+        'custom'=>[
+            'driver'=>'custom',
+            'model'=>App\User::class
+        ]
 
         // 'users' => [
         //     'driver' => 'database',

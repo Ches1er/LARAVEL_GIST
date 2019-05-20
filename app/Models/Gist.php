@@ -19,4 +19,7 @@ class Gist extends Model
     public function Category(){
         return $this->belongsTo(Category::class,'category_id','id')->first();
     }
+    public function Files(){
+        return $this->hasMany(File::class,'gist_id','id')->get();
+    }
 }

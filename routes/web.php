@@ -65,6 +65,7 @@ Route::get('/profile', "MainController@actionProfile")->middleware(['auth','isVa
 Route::post('/addpic',"ProfileController@actionAddpic")->middleware(['auth','isValidUser'])->name("addpic");
 Route::put('/changename',"ProfileController@actionChangename")->middleware(['auth','isValidUser'])->name("changename");
 Route::get('/verification_mail_repeat','ProfileController@actionRepeatVerificationMail')->middleware('auth')->name('verification_mail_repeat');
+Route::post('/get_token','ProfileController@actionGetToken')->middleware('auth')->name('get_token');
 
 /*vendor/laravel/framework/src/illuminate/routing/router.php
 1149 string */

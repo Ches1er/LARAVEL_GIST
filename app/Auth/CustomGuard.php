@@ -1,8 +1,28 @@
 <?php
 
+namespace App\Auth;
+
+use Illuminate\Contracts\Auth\UserProvider;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Crypt;
 
 class CustomGuard implements \Illuminate\Contracts\Auth\Guard
 {
+
+    /**@var UserProvider
+    */
+    public $provider;
+    public $user;
+
+    /**
+     * CustomGuard constructor.
+     * @param UserProvider $provider
+     */
+    public function __construct(UserProvider $provider)
+    {
+        $this->provider = $provider;
+    }
+
 
     /**
      * Determine if the current user is authenticated.
@@ -11,7 +31,16 @@ class CustomGuard implements \Illuminate\Contracts\Auth\Guard
      */
     public function check()
     {
-        // TODO: Implement check() method.
+        $user_token = Cookie::get('token');
+        if(!is_null($user_token)){
+            $getUserByToken = $this->provider->retrieveByToken('',$user_token);
+            if (!is_null($getUserByToken)){
+                $this->user =$getUserByToken;
+                return true;
+            }
+            return false;
+        }
+        return false;
     }
 
     /**
@@ -21,7 +50,7 @@ class CustomGuard implements \Illuminate\Contracts\Auth\Guard
      */
     public function guest()
     {
-        // TODO: Implement guest() method.
+        return !$this->check();
     }
 
     /**
@@ -31,7 +60,9 @@ class CustomGuard implements \Illuminate\Contracts\Auth\Guard
      */
     public function user()
     {
-        // TODO: Implement user() method.
+        if ($this->check())return $this->user;
+        return null;
+
     }
 
     /**
@@ -41,7 +72,8 @@ class CustomGuard implements \Illuminate\Contracts\Auth\Guard
      */
     public function id()
     {
-        // TODO: Implement id() method.
+        if ($this->check())return $this->user->id;
+        return null;
     }
 
     /**
@@ -52,7 +84,8 @@ class CustomGuard implements \Illuminate\Contracts\Auth\Guard
      */
     public function validate(array $credentials = [])
     {
-        // TODO: Implement validate() method.
+        $user = $this->provider->retrieveByCredentials($credentials);
+        return $this->provider->validateCredentials($user,$credentials);
     }
 
     /**
@@ -63,6 +96,6 @@ class CustomGuard implements \Illuminate\Contracts\Auth\Guard
      */
     public function setUser(\Illuminate\Contracts\Auth\Authenticatable $user)
     {
-        // TODO: Implement setUser() method.
+        $this->user = $user;
     }
 }

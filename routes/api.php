@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
 Route::get('/gists/{catid?}','RestController@actionGists');
 Route::get('/gist/{gistid}','RestController@actionFiles');
 Route::post('/gist/{gistid}/add','RestController@actionAddFile')->middleware('auth');
@@ -25,3 +26,9 @@ Route::post('/gist/{gistid}/add','RestController@actionAddFile')->middleware('au
 Route::get('/categories/get','RestController@actionCategories');
 Route::post('/categories/add','RestController@actionAddCategory')->middleware("admin");
 Route::delete('/categories/delete','RestController@actionDelCategory')->middleware("admin");;
+
+//Test
+
+Route::middleware('auth:myauth')->middleware('Api_checkAdmin')->get('myauth',function (){
+    return 'Hello world';
+});
