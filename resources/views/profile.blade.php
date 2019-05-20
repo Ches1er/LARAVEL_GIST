@@ -68,5 +68,19 @@
                 <input type="submit" value="Change name">
             </form>
         </div>
+
+        <div class="change_name">
+            <h3>Change pass</h3>
+
+            <form action="{{route('changepassword')}}" method="post">
+                @csrf
+                @method("put")
+                <input type="text" name="new_password">
+                @if($errors->has('name'))
+                    <span class="validation_error">{{$errors->first('name')}}</span>
+                @endif
+                <input type="submit" value="Change password">
+            </form>
+        </div>
     </div>
 @endsection

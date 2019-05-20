@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ChangePass;
 use App\Http\Requests\ProfileValidation;
 use App\Mail\EmailConfirmation;
 use App\Mail\MailConfigs;
+use App\Models\Change_password;
 use App\Models\User_token;
 use App\Services\ProfileService;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
@@ -47,6 +50,13 @@ class ProfileController extends Controller
 
         Cookie::queue(Cookie::make('token', $token, 30));
 
+        return redirect()->back();
+    }
+
+    public function actionChangePasswordRequest(Request $request){
+        $new_password = $request->post('new_password');
+        Change_password::updateOrCreate(['user_id'=>Auth::id(),'is_changed'=>0,'new_password'=>Hash::make($new_password)]);
+        event(new ChangePass($new_password));
         return redirect()->back();
     }
 }
