@@ -176,7 +176,8 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         App\Providers\Custom\AdminServiceProvider::class,
-        App\Providers\Custom\ValidationServiceProvider::class
+        App\Providers\Custom\ValidationServiceProvider::class,
+        App\Providers\Custom\ProfileServiceProvider::class
 
     ],
 

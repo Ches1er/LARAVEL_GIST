@@ -4,59 +4,62 @@ namespace App\Http\Controllers;
 
 use App\Events\ChangePass;
 use App\Http\Requests\ProfileValidation;
-use App\Mail\EmailConfirmation;
-use App\Mail\MailConfigs;
 use App\Models\Change_password;
-use App\Models\User_token;
-use App\Services\ProfileService;
-use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
+use App\Contracts\ProfileService;
 
 class ProfileController extends Controller
 {
+    protected $profileservice;
+
+    /**
+     * ProfileController constructor.
+     * @param ProfileService $profileService
+     */
+    public function __construct(ProfileService $profileService)
+    {
+        $this->profileservice = $profileService;
+    }
+
     public function actionAddpic()
     {
         $uploaddir = 'img/';
         $uploadfile = $uploaddir . basename($_FILES['userfile']['name']);
-        $user_id = Auth::user()->id;
-        ProfileService::addPicProcess($user_id,$uploadfile);
+        $this->profileservice->AddPic(Auth::user()->id,$uploadfile);
         return redirect()->back();
     }
 
     public function actionChangename(ProfileValidation $request){
-        ProfileService::changeName(Auth::user()->id,$request->post("name"));
+        $this->profileservice->ChangeName(Auth::user()->id,$request->post("name"));
         return redirect()->back();
     }
 
     public function actionRepeatVerificationMail(){
-
-        MailConfigs::instance()->verificationEmail();
-
-        $user_data = ['name' => Auth::user()->name,'remember_token'=>Auth::user()->remember_token];
-        Mail::to(Auth::user()->email)->send(new EmailConfirmation($user_data));
-        return redirect()->route('main');
+        $user_data = ['name' => Auth::user()->name,'verification_token'=>Auth::user()->email_verification_token];
+        return $this->profileservice->RepeatVerificationMail($user_data);
     }
 
     public function actionGetToken(){
+
         $roles = '["'.implode('","',Auth::user()->roles()).'"]';
         //$token = Crypt::encryptString('{"name":"'.Auth::user()->name.'","role":'.$roles.'}');
         $token = '{"name":"'.Auth::user()->name.'","role":'.$roles.'}';
-        User_token::updateOrCreate(['user_id'=>Auth::id()],['token'=>$token]);
-
-        Cookie::queue(Cookie::make('token', $token, 30));
-
-        return redirect()->back();
-    }
+        return $this->profileservice->GetToken($token);
+   }
 
     public function actionChangePasswordRequest(Request $request){
         $new_password = $request->post('new_password');
-        Change_password::updateOrCreate(['user_id'=>Auth::id(),'is_changed'=>0,'new_password'=>Hash::make($new_password)]);
-        event(new ChangePass($new_password));
-        return redirect()->back();
+        return $this->profileservice->ChangePasswordRequest(Auth::id(),$new_password);
+    }
+
+    public function actionChangePasswordAccepted(Request $request){
+        $user_id = $request->get('userid');
+        return $this->profileservice->ChangePasswordAccepted($user_id);
+    }
+    public function actionChangePasswordAborted(Request $request){
+        $user_id = $request->get('userid');
+        return $this->profileservice->ChangePasswordAborted($user_id);
     }
 }

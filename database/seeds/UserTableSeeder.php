@@ -17,15 +17,17 @@ class UserTableSeeder extends Seeder
         DB::table("users")->insert([
             [
                 "name"=>"Admin",
-                "email"=>"admin@admin.com",
+                "email"=>"shop@ukrpolystroy.com.ua",
                 "password"=>$pass,
-                "upic_id"=>2
+                "upic_id"=>2,
+                "email_verification_token"=>md5("Admin")
             ],
             [
                 "name"=>"User",
-                "email"=>"user@user.com",
+                "email"=>"shop@ukrpolystroy.com.ua",
                 "password"=>$pass,
-                "upic_id"=>1
+                "upic_id"=>1,
+                "email_verification_token"=>md5("User")
             ]
         ]);
     }

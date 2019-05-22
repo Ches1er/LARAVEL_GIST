@@ -14,18 +14,6 @@ class ChangePass
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    private $new_pass;
-
-    /**
-     * ChangePass constructor.
-     * @param $new_pass
-     */
-    public function __construct($new_pass)
-    {
-        $this->new_pass = $new_pass;
-    }
-
-
     /**
      * Get the channels the event should broadcast on.
      *

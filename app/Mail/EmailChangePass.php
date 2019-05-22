@@ -34,7 +34,9 @@ class EmailChangePass extends Mailable
         //Markdown
         return $this->markdown('emails.email_changepassword')->
         with([
-            "newpassword" => $this->data,
+            "name"=>$this->data['name'],
+            "url_accepted" =>"http://mydomain/changeaccepted/".$this->data['user_id'],
+            "url_aborted" =>"http://mydomain/changeaborted/".$this->data['user_id']
         ]);
 
     }

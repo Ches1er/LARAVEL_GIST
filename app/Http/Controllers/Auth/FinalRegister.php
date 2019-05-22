@@ -18,8 +18,8 @@ class FinalRegister
 
         DB::transaction(function () use ($token){
             $time = (string)time();
-            $id = DB::table('users')->select(['id'])->where('remember_token',$token)->first();
-            DB::table('users')->where('remember_token',$token)->whereNull('email_verified_at')
+            $id = DB::table('users')->select(['id'])->where('email_verification_token',$token)->first();
+            DB::table('users')->where('email_verification_token',$token)->whereNull('email_verified_at')
                 ->update(['email_verified_at'=>$time]);
             if(is_null(DB::table('user_roles')->where('user_id',(int)$id->id)->first()))
             {

@@ -64,7 +64,12 @@ Route::prefix('mygists')->middleware(['auth','isValidUser'])->group(function (){
 Route::get('/profile', "MainController@actionProfile")->middleware(['auth','isValidUser'])->name("profile");
 Route::post('/addpic',"ProfileController@actionAddpic")->middleware(['auth','isValidUser'])->name("addpic");
 Route::put('/changename',"ProfileController@actionChangename")->middleware(['auth','isValidUser'])->name("changename");
-Route::put('/changepassword',"ProfileController@actionChangePassword")->middleware(['auth','isValidUser'])->name("changepassword");
+
+Route::put('/changepassword',"ProfileController@actionChangePasswordRequest")->middleware(['auth','isValidUser'])->name("changepassword");
+Route::get('/changeaccepted/{userid}',"ProfileController@actionChangePasswordAccepted")->middleware(['auth','isValidUser'])->name("change_password_accepted");
+Route::get('/changeaborted/{userid}',"ProfileController@actionChangePasswordAborted")->middleware(['auth','isValidUser'])->name("change_password_aborted");
+
+
 Route::get('/verification_mail_repeat','ProfileController@actionRepeatVerificationMail')->middleware('auth')->name('verification_mail_repeat');
 Route::post('/get_token','ProfileController@actionGetToken')->middleware('auth')->name('get_token');
 

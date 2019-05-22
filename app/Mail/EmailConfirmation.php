@@ -35,7 +35,7 @@ class EmailConfirmation extends Mailable
        return $this->markdown('emails.email_confirmation')->
         with([
             "name" => $this->data['name'],
-            "url" => "http://mydomain/finalregister/".$this->data['remember_token']
+            "url" => "http://mydomain/finalregister/".$this->data['verification_token']
         ]);
 
             //Plain_text

@@ -4,10 +4,10 @@
     Congratulations {{$name}}, you have almost registrated.
     Finally you must push the button.
 
-    @component('mail::button', ['url' => 'changep'])
+    @component('mail::button', ['url' => $url_accepted])
         Yes
     @endcomponent
-    @component('mail::button', ['url' => $url])
+    @component('mail::button', ['url' => $url_aborted])
         No
     @endcomponent
 
