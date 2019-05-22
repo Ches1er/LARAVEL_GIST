@@ -97,6 +97,12 @@ Route::get('/private_resource',function (){
     return view('errors.private_resource');
 })->name('private_resource');
 
+//File exchange
+
+Route::get('/files_exchange','MainController@actionFilesExchange')->name('file_exchange');
+Route::post('/files_exchange','MainController@actionFilesExchangeHandle')->name('file_exchange_handle');
+Route::post('/upload_file','MainController@actionFilesExchangeDownload')->name('file_exchange_download');
+
 
 
 //Email browser test
