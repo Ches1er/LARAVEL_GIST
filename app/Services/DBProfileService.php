@@ -14,6 +14,7 @@ use App\Mail\MailConfigs;
 use App\Models\Change_password;
 use App\Models\User_token;
 use App\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
@@ -58,14 +59,32 @@ class DBProfileService implements ProfileService
     public function ChangePasswordRequest($user_id, $new_password)
     {
         MailConfigs::instance()->verificationEmail();
-        Change_password::updateOrCreate(['user_id'=>$user_id],['is_changed'=>0,'new_password'=>Hash::make($new_password)]);
+        $expiration = time()+ 30*60;
+        Change_password::updateOrCreate(['user_id'=>$user_id],[
+            'is_changed'=>0,
+            'new_password'=>Hash::make($new_password),
+
+            //Set expiration time for password changing process
+            'expiration'=>$expiration
+        ]);
         event(new ChangePass());
         return redirect()->back();
     }
 
-    public function ChangePasswordAccepted($user_id)
+    public function ChangePasswordAccepted($userid,Request $request)
     {
+        $cp = Change_password::where('user_id',$userid)->first();
 
+        //Check expiration time for changing
+
+        if ($cp->expiration<time()){
+            $request->session()->put('error','Your change password request has been expired, please, send request again');
+            return redirect()->route('profile');
+        }
+        $cp->is_changed = 1;
+        $cp->save();
+        User::where('id',$userid)->update(['password'=>$cp->new_password]);
+        return redirect()->back();
     }
 
     public function ChangePasswordAborted($user_id)

@@ -29,6 +29,10 @@ Route::delete('/categories/delete','RestController@actionDelCategory')->middlewa
 
 //Test
 
-Route::middleware('auth:myauth')->middleware('Api_checkAdmin')->get('myauth',function (){
-    return 'Hello world';
+Route::middleware('auth:myauth')->get('myauth',function (){
+    return 'Hello api user!';
+});
+
+Route::middleware('auth:myauth')->middleware('Api_checkAdmin')->get('myauth/admin',function (){
+    return 'Hello api Admin!';
 });

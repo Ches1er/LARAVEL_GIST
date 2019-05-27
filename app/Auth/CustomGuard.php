@@ -32,6 +32,7 @@ class CustomGuard implements \Illuminate\Contracts\Auth\Guard
     public function check()
     {
         $user_token = Cookie::get('token');
+
         if(!is_null($user_token)){
             $getUserByToken = $this->provider->retrieveByToken('',$user_token);
             if (!is_null($getUserByToken)){

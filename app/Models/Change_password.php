@@ -11,6 +11,7 @@ class Change_password extends Model
     protected $fillable = [
         'user_id',
         'is_changed',
-        'new_password'
+        'new_password',
+        'expiration'
     ];
 }

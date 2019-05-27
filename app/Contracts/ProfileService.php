@@ -9,6 +9,8 @@
 namespace App\Contracts;
 
 
+use Illuminate\Http\Request;
+
 interface ProfileService
 {
     public function AddPic($user_id,$uploadfile);
@@ -16,6 +18,6 @@ interface ProfileService
     public function RepeatVerificationMail($user_data);
     public function GetToken($token);
     public function ChangePasswordRequest($user_id,$new_password);
-    public function ChangePasswordAccepted($user_id);
+    public function ChangePasswordAccepted($user_id,Request $request);
     public function ChangePasswordAborted($user_id);
 }

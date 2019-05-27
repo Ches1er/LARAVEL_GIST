@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Contracts\AdminService;
 use App\Contracts\MainService;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 
 class MainController extends Controller
@@ -34,7 +35,11 @@ class MainController extends Controller
     }
 
     public function actionProfile(){
-        return view("profile",["user_roles"=>$this->mainservice->getRoles()]);
+        $error = session('error');
+        Session::forget('error');
+        return view("profile",["user_roles"=>$this->mainservice->getRoles(),
+            'error'=>$error
+        ]);
     }
 
     /**

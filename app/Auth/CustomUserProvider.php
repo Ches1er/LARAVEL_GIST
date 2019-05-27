@@ -40,7 +40,6 @@ class CustomUserProvider implements \Illuminate\Contracts\Auth\UserProvider
      *
      * @param mixed $identifier
      * @param string $token
-     * @param \App\User $user
      * @return \Illuminate\Contracts\Auth\Authenticatable|null
      */
     public function retrieveByToken($identifier, $token)
@@ -98,5 +97,3 @@ class CustomUserProvider implements \Illuminate\Contracts\Auth\UserProvider
     }
 }
 
-//eyJpdiI6InJKUEtXejh3aGVcL0lGVXdoSE1kOWdnPT0iLCJ2YWx1ZSI6IklzNjNQVlwvZFFFRmswN3pwSHlrZll0dklkVWNvdU5IYW93MTRaUHAzc29CMWtTZ0lZQk5lQmVcLzk2UVZDYWlGZCIsIm1hYyI6Ijk2YWE3NDQ0MDgxY2VlM2U4ZGM0YmZmZjUxZjRhNGU5ZTBiNGI1NmM4OTM2MzBlODYxY2U0NmI5ZmMxY2I3OTEifQ
-//eyJpdiI6InJKUEtXejh3aGVcL0lGVXdoSE1kOWdnPT0iLCJ2YWx1ZSI6IklzNjNQVlwvZFFFRmswN3pwSHlrZll0dklkVWNvdU5IYW93MTRaUHAzc29CMWtTZ0lZQk5lQmVcLzk2UVZDYWlGZCIsIm1hYyI6Ijk2YWE3NDQ0MDgxY2VlM2U4ZGM0YmZmZjUxZjRhNGU5ZTBiNGI1NmM4OTM2MzBlODYxY2U0NmI5ZmMxY2I3OTEifQ%3D%3D

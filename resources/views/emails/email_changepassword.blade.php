@@ -1,14 +1,11 @@
 @component('mail::message')
-    <h3>Email confirmation letter</h3>>
+    <h3>Password changing</h3>>
 
-    Congratulations {{$name}}, you have almost registrated.
-    Finally you must push the button.
+    {{$name}}, if you really want to change password,
+    push "Change password" button.
 
     @component('mail::button', ['url' => $url_accepted])
-        Yes
-    @endcomponent
-    @component('mail::button', ['url' => $url_aborted])
-        No
+        Change password
     @endcomponent
 
     Thanks,<br>

@@ -30,7 +30,6 @@ class ChangePassEmail
      */
     public function handle(ChangePass $event)
     {
-
         Mail::to(Auth::user()->email)->send(new EmailChangePass(['user_id'=>Auth::id(),'name'=>Auth::user()->name]));
     }
 }

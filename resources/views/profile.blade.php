@@ -37,6 +37,12 @@
         <form action="{{route('get_token')}}" method="post">
             @csrf
             <input type="submit" value="Send me token">
+
+            <!--For api test -->
+
+            <a href="/api/myauth">Check api token</a>
+            <a href="/api/myauth/admin">Check api token w admin</a>
+
         </form>
 
 
@@ -71,14 +77,15 @@
 
         <div class="change_name">
             <h3>Change pass</h3>
-
+            @if(!empty($error))
+                <div class="page_error_text">
+                    {{$error}}
+                </div>
+            @endif
             <form action="{{route('changepassword')}}" method="post">
                 @csrf
                 @method("put")
                 <input type="text" name="new_password">
-                @if($errors->has('name'))
-                    <span class="validation_error">{{$errors->first('name')}}</span>
-                @endif
                 <input type="submit" value="Change password">
             </form>
         </div>

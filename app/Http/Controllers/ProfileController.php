@@ -7,6 +7,7 @@ use App\Http\Requests\ProfileValidation;
 use App\Models\Change_password;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use App\Contracts\ProfileService;
 
@@ -44,8 +45,8 @@ class ProfileController extends Controller
     public function actionGetToken(){
 
         $roles = '["'.implode('","',Auth::user()->roles()).'"]';
-        //$token = Crypt::encryptString('{"name":"'.Auth::user()->name.'","role":'.$roles.'}');
-        $token = '{"name":"'.Auth::user()->name.'","role":'.$roles.'}';
+        $token = Crypt::encryptString('{"name":"'.Auth::user()->name.'","role":'.$roles.'}');
+        //$token = '{"name":"'.Auth::user()->name.'","role":'.$roles.'}';
         return $this->profileservice->GetToken($token);
    }
 
@@ -54,12 +55,7 @@ class ProfileController extends Controller
         return $this->profileservice->ChangePasswordRequest(Auth::id(),$new_password);
     }
 
-    public function actionChangePasswordAccepted(Request $request){
-        $user_id = $request->get('userid');
-        return $this->profileservice->ChangePasswordAccepted($user_id);
-    }
-    public function actionChangePasswordAborted(Request $request){
-        $user_id = $request->get('userid');
-        return $this->profileservice->ChangePasswordAborted($user_id);
+    public function actionChangePasswordAccepted($userid,Request $request){
+        return $this->profileservice->ChangePasswordAccepted($userid,$request);
     }
 }
