@@ -1,0 +1,7 @@
+1. В Http/Middleware создаем новый миддлвейр например origin. В методе handle пишем:
+        $response =  $next($request);
+        $response->headers->set("Access-Control-Allow-Origin","*");
+        return $response;
+2. Подключаем этот миддлвейр в kernel.php в массив api как
+  origin::class
+3. Теперь ссылки формата 'http://127.0.0.1:8000/api можно использовать в других фреймворках. 
