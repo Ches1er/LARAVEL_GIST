@@ -18,4 +18,4 @@ $this->app->bind('App\Contracts\ServiceName',
        public function register()
        {
            $this->app->register(ProviderName::class);
-6. Далее в любом из контроллеров, в метод передаем (ContractName $contractName) и работаем с ним.
+6. Далее в любом из контроллеров, создаем protected $serviceName передаем (ContractName $contractName) и работаем с ним.
